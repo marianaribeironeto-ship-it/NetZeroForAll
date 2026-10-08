@@ -1,0 +1,746 @@
+<title>Diagnóstico Climático das PME</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: relatório de diagnóstico numa coluna (máx. 1120px) — tese visual no topo, depois secções de dados, oportunidades e fontes. Gráficos em painéis claros sobre fundo azul-acinzentado. */
+:root {
+  --bg: #eef2f4;
+  --surface: #fbfcfc;
+  --ink: #13212a;
+  --ink-2: #44525c;
+  --muted: #74818a;
+  --line: #d6dee2;
+  --grid: #e3e9ec;
+  --axis: #b6c1c7;
+  --rail: #dfe5e8;
+  --accent: #23469c;
+  --accent-ink: #1d3a82;
+  --accent-soft: #e2e8f6;
+  --ref: #aab5bc;
+  --tip-bg: #13212a;
+  --tip-fg: #f4f7f8;
+  --s1: #2a78d6;
+  --s2: #eb6834;
+  --s3: #1baf7a;
+  --font-display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1215; --surface: #161b1e; --ink: #eef2f4; --ink-2: #b3bec5; --muted: #85919a;
+    --line: #2a3237; --grid: #232a2e; --axis: #3d474d; --rail: #262e33;
+    --accent: #8fa8ee; --accent-ink: #a9bcf3; --accent-soft: #1d2741; --ref: #55616a;
+    --tip-bg: #eef2f4; --tip-fg: #13212a;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1215; --surface: #161b1e; --ink: #eef2f4; --ink-2: #b3bec5; --muted: #85919a;
+  --line: #2a3237; --grid: #232a2e; --axis: #3d474d; --rail: #262e33;
+  --accent: #8fa8ee; --accent-ink: #a9bcf3; --accent-soft: #1d2741; --ref: #55616a;
+  --tip-bg: #eef2f4; --tip-fg: #13212a;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.wrap {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: 20px;
+  padding-block: 40px 72px;
+  display: grid;
+  gap: 52px;
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; color: var(--ink); }
+h1 { font-size: clamp(2.2rem, 5.4vw, 3.6rem); line-height: 1.02; font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.12; font-weight: 600; letter-spacing: -0.01em; }
+h3 { font-size: 1.15rem; line-height: 1.25; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent-ink); text-underline-offset: 3px; }
+a:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.eyebrow {
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted);
+}
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- Hero ---------- */
+.hero { display: grid; gap: 28px; }
+.hero-top { display: grid; gap: 14px 44px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "eye eye" "title lede" "title toc"; align-items: start; }
+.hero-top > .eyebrow { grid-area: eye; }
+.hero-top h1 { grid-area: title; }
+.hero-top .lede { grid-area: lede; }
+.hero-top .toc { grid-area: toc; }
+.lede { font-size: 1.1rem; color: var(--ink-2); }
+.toc { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.92rem; }
+.toc a { color: var(--ink-2); text-decoration: none; border-bottom: 1px solid var(--axis); padding-bottom: 1px; }
+.toc a:hover { color: var(--accent-ink); border-color: var(--accent); }
+
+.thesis {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+.thesis-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; align-items: baseline; }
+.thesis-head h2 { font-size: 1.25rem; }
+.key { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--ink-2); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
+.share { display: grid; grid-template-columns: minmax(9rem, 30%) 1fr; gap: 8px 20px; align-items: center; }
+.share-label { display: grid; gap: 2px; min-width: 0; }
+.share-label strong { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; }
+.share-label small { color: var(--muted); font-size: 0.82rem; line-height: 1.35; }
+.share-bar { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.share-track { flex: 1; height: 22px; border-radius: 5px; background: var(--rail); position: relative; overflow: hidden; }
+.share-fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 5px 4px 4px 5px; }
+.share-val { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; min-width: 4.4ch; text-align: right; font-variant-numeric: tabular-nums; }
+
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.kpi { padding: 16px 18px; border-top: 2px solid var(--ink); display: grid; gap: 6px; align-content: start; }
+.kpi-val { font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 700; line-height: 1.05; }
+.kpi-val small { font-size: 0.55em; font-weight: 600; color: var(--ink-2); }
+.kpi p { font-size: 0.88rem; color: var(--ink-2); line-height: 1.4; }
+
+/* ---------- Sections ---------- */
+section { display: grid; gap: 20px; scroll-margin-top: 16px; }
+.sec-head { display: grid; gap: 8px 44px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: start; }
+.sec-head > .eyebrow { grid-column: 1 / -1; }
+.sec-head h2 { grid-column: 1; }
+.sec-head p { grid-column: 2; color: var(--ink-2); padding-top: 4px; }
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 22px;
+  min-width: 0;
+}
+.split { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.reading { display: grid; gap: 14px; padding: 4px 4px 0; }
+.reading h3 { font-size: 1rem; }
+.reading ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 10px; color: var(--ink-2); }
+.reading li strong { color: var(--ink); font-weight: 600; }
+
+/* ---------- Charts ---------- */
+.chart { display: grid; gap: 14px; }
+.chart-title { font-weight: 600; font-size: 0.98rem; }
+.chart-sub { font-size: 0.84rem; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.85rem; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.rows { display: grid; gap: 14px; }
+.row { display: grid; grid-template-columns: minmax(8rem, 30%) minmax(0, 1fr); gap: 6px 16px; align-items: center; }
+.row-label { font-size: 0.9rem; font-weight: 500; min-width: 0; display: grid; gap: 5px; }
+.plot { position: relative; min-width: 0; }
+.track { position: relative; margin-right: 64px; }
+.gl { position: absolute; top: -7px; bottom: -7px; width: 1px; background: var(--grid); }
+.gl.base { background: var(--axis); }
+.stack { display: grid; gap: 3px; position: relative; }
+.bline { position: relative; height: 14px; cursor: default; }
+.bar { position: absolute; left: 0; top: 1px; bottom: 1px; border-radius: 0 4px 4px 0; min-width: 2px; }
+.bline:hover .bar, .bline:focus-visible .bar { filter: brightness(1.08) saturate(1.1); }
+.bval { position: absolute; top: 50%; transform: translateY(-50%); font-size: 0.78rem; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.axis { display: grid; grid-template-columns: minmax(8rem, 30%) minmax(0, 1fr); gap: 16px; }
+.axis .track { height: 16px; }
+.tick { position: absolute; transform: translateX(-50%); font-size: 0.74rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tick.first { transform: none; }
+.chart-note { font-size: 0.8rem; color: var(--muted); line-height: 1.45; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; line-height: 1;
+  padding: 4px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2); background: var(--surface);
+  white-space: nowrap;
+}
+.chip.pme { background: var(--accent-soft); border-color: transparent; color: var(--accent-ink); }
+.chip.cele { border-style: dashed; }
+.chip.cele2 { border-style: dashed; border-color: var(--accent); color: var(--accent-ink); }
+
+/* ---------- Table ---------- */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 680px; }
+th, td { padding: 10px 14px; text-align: right; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; vertical-align: top; }
+th:first-child, td:first-child { text-align: left; }
+thead th { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; background: var(--surface); }
+tbody tr:last-child td { border-bottom: 0; }
+tfoot td { font-weight: 600; border-top: 1px solid var(--axis); border-bottom: 0; }
+td small { display: block; color: var(--muted); font-size: 0.76rem; font-weight: 400; }
+
+/* ---------- Callout ---------- */
+.callout {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 22px; align-items: center;
+  background: var(--accent-soft); border-radius: 12px; padding: 20px 22px;
+}
+.callout-num { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; color: var(--accent-ink); line-height: 1; }
+.callout p { color: var(--ink); }
+.callout p + p { color: var(--ink-2); font-size: 0.88rem; margin-top: 6px; }
+
+/* ---------- Comparisons ---------- */
+.compare { display: grid; gap: 22px; }
+.cmp { display: grid; gap: 8px; }
+.cmp-title { font-weight: 600; font-size: 0.95rem; }
+.cmp-line { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) 3.4rem; gap: 12px; align-items: center; font-size: 0.85rem; color: var(--ink-2); }
+.cmp-track { height: 12px; background: var(--rail); border-radius: 4px; position: relative; overflow: hidden; }
+.cmp-fill { position: absolute; inset: 0 auto 0 0; border-radius: 0 4px 4px 0; }
+.cmp-val { text-align: right; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; }
+.facts li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 12px 0; border-bottom: 1px solid var(--grid); color: var(--ink-2); }
+.facts li:first-child { padding-top: 0; }
+.facts li:last-child { border-bottom: 0; padding-bottom: 0; }
+.facts strong { color: var(--ink); font-weight: 600; }
+
+/* ---------- Opportunities ---------- */
+.opps { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.opp {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px;
+  display: grid; gap: 12px; grid-template-rows: auto auto auto 1fr auto; min-width: 0;
+}
+.opp .eyebrow { color: var(--accent-ink); }
+.opp-why { font-size: 0.9rem; color: var(--ink-2); padding-left: 12px; border-left: 2px solid var(--axis); }
+.opp-what { font-size: 0.92rem; }
+.opp-who { display: grid; gap: 6px; }
+.opp-who span { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+
+/* ---------- Notes ---------- */
+.notes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+.notes ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 8px; color: var(--ink-2); font-size: 0.9rem; }
+.notes h3 { font-size: 1rem; margin-bottom: 10px; }
+footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; }
+
+/* ---------- Chip legend ---------- */
+.chip-key { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.8rem; color: var(--ink-2); }
+.chip-key span { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ---------- Tooltip ---------- */
+.tip {
+  position: fixed; z-index: 10; pointer-events: none; max-width: 260px;
+  background: var(--tip-bg); color: var(--tip-fg); font-size: 0.8rem; line-height: 1.4;
+  padding: 7px 10px; border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .split, .notes { grid-template-columns: minmax(0, 1fr); }
+  .hero-top, .sec-head { grid-template-columns: minmax(0, 1fr); grid-template-areas: none; }
+  .hero-top > .eyebrow, .hero-top h1, .hero-top .lede, .hero-top .toc { grid-area: auto; }
+  .sec-head > .eyebrow, .sec-head h2, .sec-head p { grid-column: auto; }
+  .sec-head p { padding-top: 0; }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .wrap { gap: 48px; padding-block: 28px 56px; padding-inline: 16px; }
+  .share, .row, .axis { grid-template-columns: minmax(0, 1fr); }
+  .axis > :first-child { display: none; }
+  .share-val { font-size: 1.3rem; }
+  .thesis, .panel { padding: 18px; }
+  .callout { grid-template-columns: minmax(0, 1fr); }
+  .track { margin-right: 52px; }
+}
+@media (max-width: 420px) {
+  .kpis { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bar, .cmp-fill, .share-fill { transition: filter 0.15s ease; }
+}
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-top">
+      <span class="eyebrow">Portugal · retrato de outubro de 2026</span>
+      <h1>Diagnóstico Climático das PME</h1>
+      <p class="lede">As PME são quase todas as empresas do país, empregam a maior parte das pessoas e geram mais de metade das emissões do setor empresarial. Este diagnóstico junta os dados mais recentes sobre empresas, emprego e emissões, e mostra onde a descarbonização das PME pode avançar mais depressa.</p>
+      <nav class="toc" aria-label="Secções">
+        <a href="#dimensao">Dimensão</a>
+        <a href="#setores">Setores</a>
+        <a href="#emissoes">Emissões</a>
+        <a href="#comportamento">Comportamento</a>
+        <a href="#oportunidades">Oportunidades</a>
+        <a href="#fontes">Notas e fontes</a>
+      </nav>
+    </div>
+
+    <div class="thesis" role="img" aria-label="Peso das PME: 99,7% das empresas, 70,1% do emprego e 56% das emissões do setor empresarial.">
+      <div class="thesis-head">
+        <h2>O peso das PME</h2>
+        <div class="key">
+          <span><i class="sw" style="background: var(--accent)"></i>PME</span>
+          <span><i class="sw" style="background: var(--rail); box-shadow: inset 0 0 0 1px var(--axis)"></i>Grandes empresas</span>
+        </div>
+      </div>
+      <div class="share">
+        <div class="share-label"><strong>Empresas</strong><small>558.722 sociedades não financeiras, 2025</small></div>
+        <div class="share-bar"><div class="share-track"><div class="share-fill" style="width: 99.7%"></div></div><span class="share-val">99,7%</span></div>
+      </div>
+      <div class="share">
+        <div class="share-label"><strong>Emprego</strong><small>3,78 milhões de pessoas ao serviço, 2025</small></div>
+        <div class="share-bar"><div class="share-track"><div class="share-fill" style="width: 70.1%"></div></div><span class="share-val">70,1%</span></div>
+      </div>
+      <div class="share">
+        <div class="share-label"><strong>Emissões do setor empresarial</strong><small>Estimativa da OCDE · média da UE: 37%</small></div>
+        <div class="share-bar"><div class="share-track"><div class="share-fill" style="width: 56%"></div></div><span class="share-val">56%</span></div>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-val num">558.722</div><p>sociedades não financeiras em Portugal em 2025</p></div>
+      <div class="kpi"><div class="kpi-val num">3,78 <small>milhões</small></div><p>pessoas ao serviço nessas empresas em 2025</p></div>
+      <div class="kpi"><div class="kpi-val num">46,3 <small>Mt CO₂e</small></div><p>emissões de gases com efeito de estufa das atividades económicas em 2023</p></div>
+      <div class="kpi"><div class="kpi-val num">65%</div><p>do consumo de energia do setor empresarial é das PME (UE: cerca de 43%)</p></div>
+    </div>
+  </header>
+
+  <section id="dimensao">
+    <div class="sec-head">
+      <span class="eyebrow">Banco de Portugal · 2025</span>
+      <h2>Dimensão: muitas empresas pequenas, emprego repartido</h2>
+    </div>
+    <div class="split">
+      <div class="panel">
+        <div class="chart" id="chart-size">
+          <div>
+            <div class="chart-title">Peso de cada dimensão no total</div>
+            <div class="chart-sub">% do número de empresas e % do emprego, sociedades não financeiras</div>
+          </div>
+        </div>
+      </div>
+      <div class="reading">
+        <h3>Leitura</h3>
+        <ul>
+          <li><strong>As microempresas são 88,8% das empresas</strong> mas asseguram 25,1% do emprego.</li>
+          <li><strong>Pequenas e médias empresas</strong> somam 11% das empresas e 45% do emprego. É aqui que estão as equipas com capacidade para planear e investir.</li>
+          <li><strong>As grandes empresas são 0,3%</strong>, empregam 29,9% das pessoas e geram 42,8% do volume de negócios.</li>
+          <li>Com 557 mil PME, a descarbonização só ganha escala com ferramentas simples e replicáveis e com intermediários próximos das empresas.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="setores">
+    <div class="sec-head">
+      <span class="eyebrow">Banco de Portugal 2025 · INE/Eurostat 2023</span>
+      <h2>Setores: onde estão as empresas, as pessoas e as emissões</h2>
+      <p>Mais de 99% das empresas de cada setor são PME, por isso a distribuição das empresas por setor é, na prática, a distribuição das PME.</p>
+    </div>
+    <div class="panel">
+      <div class="chart" id="chart-sector">
+        <div>
+          <div class="chart-title">Peso de cada setor nas empresas, no emprego e nas emissões</div>
+          <div class="chart-sub">% do total. Empresas e emprego: 2025. Emissões de GEE das atividades económicas: 2023</div>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <caption class="eyebrow" style="text-align:left; padding: 14px 14px 4px;">Tabela de dados por setor</caption>
+        <thead>
+          <tr>
+            <th scope="col">Setor</th>
+            <th scope="col">Empresas (n.º)</th>
+            <th scope="col">% empresas</th>
+            <th scope="col">% emprego</th>
+            <th scope="col">Emissões (mil t CO₂e)</th>
+            <th scope="col">% emissões</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Outros serviços<small>transportes, alojamento, restauração, serviços às empresas, saúde…</small></td><td>≈ 331.300</td><td>59,3%</td><td>47,7%</td><td>11.274</td><td>24,4%</td></tr>
+          <tr><td>Comércio</td><td>≈ 98.300</td><td>17,6%</td><td>17,9%</td><td>1.676</td><td>3,6%</td></tr>
+          <tr><td>Construção</td><td>≈ 61.500</td><td>11,0%</td><td>10,9%</td><td>1.344</td><td>2,9%</td></tr>
+          <tr><td>Indústria<small>extrativa e transformadora</small></td><td>≈ 43.600</td><td>7,8%</td><td>19,4%</td><td>11.248</td><td>24,3%</td></tr>
+          <tr><td>Agricultura e pescas</td><td rowspan="2">≈ 24.000<small>os dois setores</small></td><td rowspan="2">4,3%</td><td rowspan="2">4,1%</td><td>8.819</td><td>19,1%</td></tr>
+          <tr><td>Energia, água e resíduos</td><td>11.292</td><td>24,4%</td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td>Total</td><td>558.722</td><td>100%</td><td>100%</td><td>46.264<small>inclui 611 do setor financeiro e da administração pública</small></td><td>100%</td></tr>
+        </tfoot>
+      </table>
+    </div>
+    <p class="chart-note">O número de empresas por setor foi calculado a partir das percentagens publicadas pelo Banco de Portugal. Os setores seguem a agregação do Banco de Portugal.</p>
+  </section>
+
+  <section id="emissoes">
+    <div class="sec-head">
+      <span class="eyebrow">INE/Eurostat · 2023</span>
+      <h2>Emissões: as maiores fontes e quem as gere</h2>
+      <p>As emissões estão concentradas em poucas atividades. Algumas dependem de grandes empresas já abrangidas pelo Comércio Europeu de Licenças de Emissão (CELE). Outras estão espalhadas por milhares de PME e ainda não têm preço de carbono. Isso muda em 2028, quando o CELE 2 passa a abranger os combustíveis usados nos transportes rodoviários, nos edifícios e na indústria que não está no CELE atual.</p>
+    </div>
+    <div class="panel">
+      <div class="chart" id="chart-sources">
+        <div>
+          <div class="chart-title">Atividades com mais emissões de GEE</div>
+          <div class="chart-sub">mil t CO₂e, 2023 · perfil dominante e cobertura pelo CELE indicados por baixo de cada atividade</div>
+        </div>
+        <div class="chip-key"><span><i class="chip pme">Sobretudo PME</i>perfil dominante</span><span><i class="chip cele">CELE</i>grandes instalações já abrangidas</span><span><i class="chip cele2">CELE 2 · 2028</i>combustíveis com preço de carbono a partir de 2028</span><span><i class="chip">Fora do CELE</i>sem preço de carbono previsto</span></div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-num num">≈ 16 Mt</div>
+      <div>
+        <p>Cerca de 35% das emissões das atividades económicas vêm de atividades fora do CELE atual com forte presença de PME: agricultura, transportes terrestres, comércio, construção, têxtil e calçado, alojamento e restauração.</p>
+        <p>A agricultura (≈ 8,4 Mt) continua sem preço de carbono. O resto, até cerca de 8 Mt, passa a ter preço através do CELE 2 a partir de 2028, na parte que vem da queima de combustíveis. Valores indicativos calculados a partir das contas de emissões.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="comportamento">
+    <div class="sec-head">
+      <span class="eyebrow">OCDE · 2025</span>
+      <h2>Comportamento: as PME portuguesas face à média europeia</h2>
+      <p>As PME portuguesas pesam mais nas emissões e na energia do que a média europeia, mas agem menos.</p>
+    </div>
+    <div class="split">
+      <div class="panel">
+        <div class="compare">
+          <div class="legend">
+            <span><i class="sw" style="background: var(--accent)"></i>Portugal</span>
+            <span><i class="sw" style="background: var(--ref)"></i>Média da UE</span>
+          </div>
+          <div class="cmp">
+            <div class="cmp-title">Peso das PME nas emissões de GEE do setor empresarial</div>
+            <div class="cmp-line" tabindex="0" data-tip="Portugal: as PME geram 56% das emissões do setor empresarial (estimativa OCDE)"><span>Portugal</span><div class="cmp-track"><div class="cmp-fill" style="width:56%; background: var(--accent)"></div></div><span class="cmp-val">56%</span></div>
+            <div class="cmp-line" tabindex="0" data-tip="Média da UE: 37%"><span>UE</span><div class="cmp-track"><div class="cmp-fill" style="width:37%; background: var(--ref)"></div></div><span class="cmp-val">37%</span></div>
+          </div>
+          <div class="cmp">
+            <div class="cmp-title">Peso das PME no consumo de energia do setor empresarial</div>
+            <div class="cmp-line" tabindex="0" data-tip="Portugal: as PME consomem 65% da energia do setor empresarial"><span>Portugal</span><div class="cmp-track"><div class="cmp-fill" style="width:65%; background: var(--accent)"></div></div><span class="cmp-val">65%</span></div>
+            <div class="cmp-line" tabindex="0" data-tip="Média da UE: cerca de 43% (22 pontos abaixo de Portugal)"><span>UE</span><div class="cmp-track"><div class="cmp-fill" style="width:43%; background: var(--ref)"></div></div><span class="cmp-val">≈ 43%</span></div>
+          </div>
+          <div class="cmp">
+            <div class="cmp-title">PME que oferecem produtos ou serviços verdes</div>
+            <div class="cmp-line" tabindex="0" data-tip="Portugal: 27% das PME oferecem produtos ou serviços verdes"><span>Portugal</span><div class="cmp-track"><div class="cmp-fill" style="width:27%; background: var(--accent)"></div></div><span class="cmp-val">27%</span></div>
+            <div class="cmp-line" tabindex="0" data-tip="Média da UE: 32%"><span>UE</span><div class="cmp-track"><div class="cmp-fill" style="width:32%; background: var(--ref)"></div></div><span class="cmp-val">32%</span></div>
+          </div>
+        </div>
+      </div>
+      <ul class="facts">
+        <li><strong>Estratégia sem ação.</strong> Muitas PME portuguesas têm estratégia climática, mas poucas passam a ações concretas de neutralidade carbónica.</li>
+        <li><strong>Menos ação do que na UE.</strong> Menos PME em Portugal reduzem emissões ou desenvolvem e compram tecnologias de baixo carbono.</li>
+        <li><strong>Eficiência em recuo.</strong> Desde 2017, a proporção de PME com medidas para poupar energia, materiais ou água caiu mais de 25% em cada uma destas áreas.</li>
+        <li><strong>Mercado verde a crescer.</strong> 21% das PME planeiam oferecer produtos ou serviços verdes em breve, e as especializadas nestes produtos passaram de 14% para 31% desde 2017.</li>
+        <li><strong>Quem age mais.</strong> Médias empresas e indústria transformadora são as que mais adotam medidas.</li>
+        <li><strong>Causas possíveis, segundo a OCDE.</strong> Condições de financiamento restritivas, menor sensibilização e contexto de negócio volátil.</li>
+        <li><strong>Custo da energia.</strong> Na UE, a eletricidade e o gás passaram de 4% para 6,4% do volume de negócios das PME entre 2018 e o 1.º semestre de 2022.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="oportunidades">
+    <div class="sec-head">
+      <span class="eyebrow">Leitura do diagnóstico</span>
+      <h2>Oportunidades</h2>
+      <p>Seis frentes onde os dados mostram potencial de redução e onde há caminhos práticos para as PME.</p>
+    </div>
+    <div class="opps">
+      <article class="opp">
+        <span class="eyebrow">Ação</span>
+        <h3>Passar da estratégia à ação</h3>
+        <p class="opp-why">Muitas PME já têm estratégia climática, mas as medidas de poupança de energia, materiais e água recuaram mais de 25% desde 2017.</p>
+        <p class="opp-what">Diagnóstico rápido da pegada (âmbitos 1 e 2) com o custo do carbono nos combustíveis a partir de 2028, plano com três a cinco medidas de retorno rápido e acompanhamento regular dos resultados.</p>
+        <div class="opp-who"><span>Para quem</span><div class="chips"><i class="chip">Micro e pequenas</i><i class="chip">Comércio</i><i class="chip">Serviços</i></div></div>
+      </article>
+      <article class="opp">
+        <span class="eyebrow">Energia</span>
+        <h3>Reduzir a fatura energética</h3>
+        <p class="opp-why">As PME consomem 65% da energia do setor empresarial, o peso da energia no volume de negócios subiu para 6,4% (UE, 2022) e o gás para aquecimento entra no CELE 2 em 2028.</p>
+        <p class="opp-what">Auditorias energéticas simples, eficiência em climatização, frio e iluminação, autoconsumo solar e comunidades de energia renovável.</p>
+        <div class="opp-who"><span>Para quem</span><div class="chips"><i class="chip">Indústria transformadora</i><i class="chip">Alojamento e restauração</i><i class="chip">Comércio alimentar</i></div></div>
+      </article>
+      <article class="opp">
+        <span class="eyebrow">Mobilidade</span>
+        <h3>Frotas e logística</h3>
+        <p class="opp-why">Os transportes terrestres emitem cerca de 4,1 Mt CO₂e por ano, num setor muito fragmentado. A partir de 2028, o gasóleo e a gasolina passam a ter preço de carbono (CELE 2).</p>
+        <p class="opp-what">Eletrificação de frotas ligeiras, otimização de rotas e cargas, e partilha logística entre empresas da mesma zona.</p>
+        <div class="opp-who"><span>Para quem</span><div class="chips"><i class="chip">Transporte de mercadorias</i><i class="chip">Distribuição</i><i class="chip">Construção</i></div></div>
+      </article>
+      <article class="opp">
+        <span class="eyebrow">Dados e financiamento</span>
+        <h3>Preparar as PME para o crédito verde e para a cadeia de valor</h3>
+        <p class="opp-why">Bancos e grandes clientes pedem dados ESG, coexistem pelo menos dois instrumentos de reporte (banca e IAPMEI) e o PRR termina em 2026.</p>
+        <p class="opp-what">Reporte simplificado e harmonizado, por exemplo com a norma voluntária europeia para PME (VSME), e preparação de candidaturas ao Portugal 2030 e a linhas de crédito verde.</p>
+        <div class="opp-who"><span>Para quem</span><div class="chips"><i class="chip">Fornecedoras de grandes empresas</i><i class="chip">Exportadoras</i><i class="chip">Médias empresas</i></div></div>
+      </article>
+      <article class="opp">
+        <span class="eyebrow">Mercado</span>
+        <h3>Produtos e serviços verdes</h3>
+        <p class="opp-why">21% das PME planeiam oferecer produtos ou serviços verdes, e as especializadas passaram de 14% para 31% desde 2017.</p>
+        <p class="opp-what">Apoio a novos modelos de negócio: economia circular, reparação, serviços de eficiência e materiais de baixo carbono.</p>
+        <div class="opp-who"><span>Para quem</span><div class="chips"><i class="chip">Indústria</i><i class="chip">Construção</i><i class="chip">Serviços técnicos</i></div></div>
+      </article>
+      <article class="opp">
+        <span class="eyebrow">Escala</span>
+        <h3>Chegar às microempresas em grupo</h3>
+        <p class="opp-why">88,8% das empresas são micro e asseguram 25% do emprego. A agricultura, silvicultura e pescas, dominadas por pequenos produtores, emitem 19% do total das atividades.</p>
+        <p class="opp-what">Programas setoriais com associações, municípios, clusters e cooperativas, ferramentas padronizadas e mentoria partilhada.</p>
+        <div class="opp-who"><span>Para quem</span><div class="chips"><i class="chip">Microempresas</i><i class="chip">Agricultura</i><i class="chip">Comércio local</i></div></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="fontes">
+    <div class="sec-head">
+      <span class="eyebrow">Metodologia</span>
+      <h2>Notas e fontes</h2>
+    </div>
+    <div class="notes">
+      <div>
+        <h3>Notas</h3>
+        <ul>
+          <li>Empresas e emprego: sociedades não financeiras da Central de Balanços do Banco de Portugal, 2025. Não inclui empresários em nome individual nem trabalhadores independentes.</li>
+          <li>Emissões: contas de emissões atmosféricas (INE/Eurostat), 2023, segundo o princípio da residência. Incluem a aviação e a navegação internacional de operadores residentes e excluem as emissões das famílias (6,5 Mt CO₂e).</li>
+          <li>Peso das PME nas emissões e na energia: estimativas da OCDE, que repartem as emissões de cada setor pelas PME de acordo com o seu peso no valor acrescentado e no emprego. Não são medições diretas.</li>
+          <li>Os anos não coincidem: empresas e emprego são de 2025 e emissões de 2023.</li>
+          <li>O CELE 2 arranca em 2028 e abrange o CO₂ dos combustíveis usados nos transportes rodoviários, nos edifícios e na indústria fora do CELE atual. Ficam de fora a agricultura, as pescas, a floresta, a ferrovia e a aviação e navegação domésticas. Quem compra as licenças são os fornecedores de combustível. Em junho de 2026, a UE acordou reforçar o controlo de preços, com libertação de licenças da reserva quando o preço passar 45 € por tonelada.</li>
+          <li>O perfil dominante (PME, misto ou grandes empresas) e a cobertura pelo CELE são indicativos, com base na estrutura típica de cada atividade. O valor de cerca de 16 Mt soma agricultura e pecuária, transportes terrestres, comércio, construção, têxtil e calçado, e alojamento e restauração.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Fontes</h3>
+        <ul>
+          <li><a href="https://dinheirovivo.dn.pt/empresas/nmero-de-empresas-cresce-33-e-volume-de-negcios-avana-para-577-milhes-em-2025" target="_blank" rel="noopener">Banco de Portugal, Central de Balanços, citado em Dinheiro Vivo / DN (Lusa), 6 out. 2026</a></li>
+          <li><a href="https://ec.europa.eu/eurostat/databrowser/view/env_ac_ainah_r2/default/table" target="_blank" rel="noopener">Eurostat: contas de emissões atmosféricas por atividade (env_ac_ainah_r2), Portugal 2023</a></li>
+          <li><a href="https://www.oecd.org/en/publications/the-green-transition-of-smes-and-entrepreneurship-in-portugal_36e668f2-en.html" target="_blank" rel="noopener">OCDE (2025): The Green Transition of SMEs and Entrepreneurship in Portugal</a> (<a href="https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/09/the-green-transition-of-smes-and-entrepreneurship-in-portugal_8d0195a7/36e668f2-en.pdf" target="_blank" rel="noopener">PDF</a>)</li>
+          <li><a href="https://www.oecd.org/en/publications/assessing-greenhouse-gas-emissions-and-energy-consumption-in-smes_ac8e6450-en.html" target="_blank" rel="noopener">OCDE (2023): Assessing greenhouse gas emissions and energy consumption in SMEs</a></li>
+          <li><a href="https://www.oecd.org/en/topics/greening-smes" target="_blank" rel="noopener">OCDE: Greening SMEs (custo da energia nas PME da UE)</a></li>
+          <li><a href="https://esgnews.com/eu-tightens-ets2-price-controls-to-shield-consumers-from-carbon-market-volatility/" target="_blank" rel="noopener">ESG News: reforço do controlo de preços do CELE 2 (junho de 2026)</a></li>
+          <li><a href="https://portugal.gov.pt/gc25/comunicacao/comunicados/consulta-publica-plano-social-para-o-clima-para-garantir-uma-transicao-justa-e-inclusiva" target="_blank" rel="noopener">Governo de Portugal: Plano Social para o Clima 2026–2032</a></li>
+          <li><a href="https://climate.ec.europa.eu/eu-action/eu-emissions-trading-system-eu-ets/ets2-buildings-road-transport-and-additional-sectors_hr" target="_blank" rel="noopener">Comissão Europeia: ETS2 – edifícios, transporte rodoviário e setores adicionais</a></li>
+        </ul>
+      </div>
+    </div>
+    <footer>Diagnóstico preparado em outubro de 2026 com os dados públicos mais recentes disponíveis nessa data.</footer>
+  </section>
+
+</div>
+
+<div class="tip" id="tip" role="tooltip" hidden></div>
+
+<script>
+(function () {
+  function fmt(n, d) {
+    d = d || 0;
+    var s = n.toFixed(d).split(".");
+    var i = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return s[1] ? i + "," + s[1] : i;
+  }
+  function pct(n) { return fmt(n, Number.isInteger(n) ? 0 : 1) + "%"; }
+
+  function el(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+
+  function legend(series) {
+    var l = el("div", "legend");
+    series.forEach(function (s) {
+      l.appendChild(el("span", null, '<i class="sw" style="background: var(' + s.color + ')"></i>' + s.name));
+    });
+    return l;
+  }
+
+  function gridlines(track, ticks, max) {
+    ticks.forEach(function (t) {
+      var g = el("div", "gl" + (t === 0 ? " base" : ""));
+      g.style.left = (t / max * 100) + "%";
+      track.appendChild(g);
+    });
+  }
+
+  function axis(ticks, max, format) {
+    var a = el("div", "axis");
+    a.appendChild(el("div"));
+    var plot = el("div", "plot");
+    var track = el("div", "track");
+    ticks.forEach(function (t) {
+      var k = el("span", "tick" + (t === 0 ? " first" : ""), format(t));
+      k.style.left = (t / max * 100) + "%";
+      track.appendChild(k);
+    });
+    plot.appendChild(track);
+    a.appendChild(plot);
+    return a;
+  }
+
+  function barLine(value, max, color, label, tip) {
+    var line = el("div", "bline");
+    line.tabIndex = 0;
+    line.setAttribute("data-tip", tip);
+    line.setAttribute("aria-label", tip);
+    var b = el("div", "bar");
+    b.style.width = (value / max * 100) + "%";
+    b.style.background = "var(" + color + ")";
+    var v = el("span", "bval", label);
+    v.style.left = "calc(" + (value / max * 100) + "% + 6px)";
+    line.appendChild(b);
+    line.appendChild(v);
+    return line;
+  }
+
+  /* Gráfico 1 — dimensão */
+  (function () {
+    var root = document.getElementById("chart-size");
+    var series = [
+      { key: "emp", name: "Empresas", color: "--s1" },
+      { key: "job", name: "Emprego", color: "--s2" }
+    ];
+    var rows = [
+      { label: "Microempresas", emp: 88.8, job: 25.1 },
+      { label: "Pequenas", emp: 9.4, job: 25.0 },
+      { label: "Médias", emp: 1.6, job: 20.0 },
+      { label: "Grandes", emp: 0.3, job: 29.9 }
+    ];
+    var max = 100, ticks = [0, 25, 50, 75, 100];
+    root.appendChild(legend(series));
+    var list = el("div", "rows");
+    rows.forEach(function (r) {
+      var row = el("div", "row");
+      row.appendChild(el("div", "row-label", r.label));
+      var plot = el("div", "plot");
+      var track = el("div", "track");
+      gridlines(track, ticks, max);
+      var stack = el("div", "stack");
+      series.forEach(function (s) {
+        stack.appendChild(barLine(r[s.key], max, s.color, pct(r[s.key]),
+          r.label + " · " + s.name + ": " + pct(r[s.key]) + " do total"));
+      });
+      track.appendChild(stack);
+      plot.appendChild(track);
+      row.appendChild(plot);
+      list.appendChild(row);
+    });
+    root.appendChild(list);
+    root.appendChild(axis(ticks, max, function (t) { return t + "%"; }));
+  })();
+
+  /* Gráfico 2 — setores */
+  (function () {
+    var root = document.getElementById("chart-sector");
+    var series = [
+      { key: "emp", name: "Empresas", color: "--s1" },
+      { key: "job", name: "Emprego", color: "--s2" },
+      { key: "ghg", name: "Emissões", color: "--s3" }
+    ];
+    var rows = [
+      { label: "Outros serviços", emp: 59.3, job: 47.7, ghg: 24.4 },
+      { label: "Comércio", emp: 17.6, job: 17.9, ghg: 3.6 },
+      { label: "Construção", emp: 11.0, job: 10.9, ghg: 2.9 },
+      { label: "Indústria", emp: 7.8, job: 19.4, ghg: 24.3 },
+      { label: "Agricultura, energia, água e resíduos", emp: 4.3, job: 4.1, ghg: 43.5 }
+    ];
+    var max = 60, ticks = [0, 20, 40, 60];
+    root.appendChild(legend(series));
+    var list = el("div", "rows");
+    rows.forEach(function (r) {
+      var row = el("div", "row");
+      row.appendChild(el("div", "row-label", r.label));
+      var plot = el("div", "plot");
+      var track = el("div", "track");
+      gridlines(track, ticks, max);
+      var stack = el("div", "stack");
+      series.forEach(function (s) {
+        var v = r[s.key];
+        var label = (r.emp === 4.3 && s.key !== "ghg") ? "≈ " + pct(v) : pct(v);
+        stack.appendChild(barLine(v, max, s.color, label,
+          r.label + " · " + s.name + ": " + label + " do total"));
+      });
+      track.appendChild(stack);
+      plot.appendChild(track);
+      row.appendChild(plot);
+      list.appendChild(row);
+    });
+    root.appendChild(list);
+    root.appendChild(axis(ticks, max, function (t) { return t + "%"; }));
+    var note = el("p", "chart-note", "Emissões em % das 46,3 Mt CO₂e das atividades económicas; o setor financeiro e a administração pública (1,3%) não aparecem. Na última linha, empresas e emprego dizem respeito à agricultura e à energia e água em conjunto.");
+    root.appendChild(note);
+  })();
+
+  /* Gráfico 3 — fontes de emissões */
+  (function () {
+    var root = document.getElementById("chart-sources");
+    var rows = [
+      { label: "Agricultura e pecuária", v: 8432, prof: "PME e produtores individuais", pme: true, cele: "Fora do CELE" },
+      { label: "Resíduos e saneamento", v: 7018, prof: "Grandes e entidades públicas", cele: "Fora do CELE" },
+      { label: "Transporte aéreo", v: 4789, prof: "Sobretudo grandes", cele: "CELE nos voos dentro do EEE" },
+      { label: "Eletricidade e gás", v: 4237, prof: "Sobretudo grandes", cele: "CELE" },
+      { label: "Transportes terrestres", v: 4060, prof: "Misto", cele: "CELE 2 · 2028" },
+      { label: "Cimento, cerâmica e vidro", v: 4026, prof: "Misto", cele: "Sobretudo CELE" },
+      { label: "Refinação de petróleo", v: 2401, prof: "Sobretudo grandes", cele: "CELE" },
+      { label: "Comércio", v: 1676, prof: "Misto", cele: "CELE 2 · 2028" },
+      { label: "Construção", v: 1344, prof: "Sobretudo PME", pme: true, cele: "CELE 2 · 2028" },
+      { label: "Papel e pasta de papel", v: 994, prof: "Sobretudo grandes", cele: "CELE" },
+      { label: "Alimentação e bebidas", v: 983, prof: "Misto", cele: "CELE ou CELE 2 · 2028" },
+      { label: "Têxtil, vestuário e calçado", v: 475, prof: "Sobretudo PME", pme: true, cele: "CELE 2 · 2028" },
+      { label: "Saúde e apoio social", v: 457, prof: "Misto", cele: "CELE 2 · 2028" },
+      { label: "Alojamento e restauração", v: 409, prof: "Sobretudo PME", pme: true, cele: "CELE 2 · 2028" }
+    ];
+    var max = 9000, ticks = [0, 3000, 6000, 9000];
+    var list = el("div", "rows");
+    rows.forEach(function (r) {
+      var row = el("div", "row");
+      var lab = el("div", "row-label");
+      lab.appendChild(el("span", null, r.label));
+      var chips = el("div", "chips");
+      chips.appendChild(el("i", "chip" + (r.pme ? " pme" : ""), r.prof));
+      chips.appendChild(el("i", "chip" + (r.cele.indexOf("Fora") === 0 ? "" : (r.cele.indexOf("CELE 2") >= 0 ? " cele2" : " cele")), r.cele));
+      lab.appendChild(chips);
+      row.appendChild(lab);
+      var plot = el("div", "plot");
+      var track = el("div", "track");
+      gridlines(track, ticks, max);
+      var stack = el("div", "stack");
+      var share = r.v / 46264 * 100;
+      stack.appendChild(barLine(r.v, max, "--s3", fmt(r.v),
+        r.label + ": " + fmt(r.v) + " mil t CO₂e (" + fmt(share, 1) + "% das atividades económicas)"));
+      track.appendChild(stack);
+      plot.appendChild(track);
+      row.appendChild(plot);
+      list.appendChild(row);
+    });
+    root.appendChild(list);
+    root.appendChild(axis(ticks, max, function (t) { return fmt(t); }));
+  })();
+
+  /* Tooltip */
+  var tip = document.getElementById("tip");
+  function show(t) {
+    tip.textContent = t.getAttribute("data-tip");
+    tip.hidden = false;
+    var r = t.getBoundingClientRect();
+    var bar = t.querySelector(".bar, .cmp-fill");
+    var anchorX = bar ? bar.getBoundingClientRect().right : r.right;
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    var x = Math.min(Math.max(8, anchorX - w / 2), window.innerWidth - w - 8);
+    var y = r.top - h - 8;
+    if (y < 8) y = r.bottom + 8;
+    tip.style.left = x + "px";
+    tip.style.top = y + "px";
+  }
+  function hide() { tip.hidden = true; }
+  document.addEventListener("pointerover", function (e) {
+    var t = e.target.closest && e.target.closest("[data-tip]");
+    if (t) show(t);
+  });
+  document.addEventListener("pointerout", function (e) {
+    var t = e.target.closest && e.target.closest("[data-tip]");
+    if (t && !t.contains(e.relatedTarget)) hide();
+  });
+  document.addEventListener("focusin", function (e) {
+    var t = e.target.closest && e.target.closest("[data-tip]");
+    if (t) show(t); else hide();
+  });
+  document.addEventListener("focusout", hide);
+  window.addEventListener("scroll", hide, { passive: true });
+})();
+</script>
