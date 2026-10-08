@@ -1,0 +1,970 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Capacitação Climática dos Jovens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: diagnóstico de capacitação climática dos jovens. Uma coluna até 1120px; tese em três degraus (saber, querer, fazer), secções de dados, conclusões e tabela de solidez das fontes. Acento ameixa para distinguir dos outros dois. */
+:root {
+  --bg: #f2f0f2;
+  --surface: #fcfbfc;
+  --ink: #201722;
+  --ink-2: #4d4350;
+  --muted: #7b707d;
+  --line: #ddd6de;
+  --grid: #e9e4e9;
+  --axis: #c0b6c2;
+  --rail: #e6e0e7;
+  --accent: #7a3b6e;
+  --accent-ink: #63305a;
+  --accent-soft: #f0e2ed;
+  --gap: #cf5a2a;
+  --ref: #b3a9b5;
+  --g1: #2f6db5;
+  --g2: #b5761c;
+  --tip-bg: #201722;
+  --tip-fg: #f6f2f6;
+  --font-display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121013; --surface: #1b171c; --ink: #f1ecf1; --ink-2: #c1b6c3; --muted: #918593;
+    --line: #322a33; --grid: #29222a; --axis: #463b47; --rail: #2c252d;
+    --accent: #d49bc6; --accent-ink: #e5b8d9; --accent-soft: #352433; --gap: #e8784a; --ref: #5d535f; --g1: #6aa5ea; --g2: #dba150;
+    --tip-bg: #f1ecf1; --tip-fg: #201722;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121013; --surface: #1b171c; --ink: #f1ecf1; --ink-2: #c1b6c3; --muted: #918593;
+  --line: #322a33; --grid: #29222a; --axis: #463b47; --rail: #2c252d;
+  --accent: #d49bc6; --accent-ink: #e5b8d9; --accent-soft: #352433; --gap: #e8784a; --ref: #5d535f; --g1: #6aa5ea; --g2: #dba150;
+  --tip-bg: #f1ecf1; --tip-fg: #201722;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.wrap {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: 20px;
+  padding-block: 40px 72px;
+  display: grid;
+  gap: 52px;
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; color: var(--ink); }
+h1 { font-size: clamp(2.2rem, 5.4vw, 3.6rem); line-height: 1.02; font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.12; font-weight: 600; letter-spacing: -0.01em; }
+h3 { font-size: 1.15rem; line-height: 1.25; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent-ink); text-underline-offset: 3px; }
+a:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.eyebrow {
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted);
+}
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- Hero ---------- */
+.hero { display: grid; gap: 28px; }
+.hero-top { display: grid; gap: 14px 44px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "eye eye" "title lede" "title toc"; align-items: start; }
+.hero-top > .eyebrow { grid-area: eye; }
+.hero-top h1 { grid-area: title; }
+.hero-top .lede { grid-area: lede; }
+.hero-top .toc { grid-area: toc; }
+.lede { font-size: 1.1rem; color: var(--ink-2); }
+.toc { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.92rem; }
+.toc a { color: var(--ink-2); text-decoration: none; border-bottom: 1px solid var(--axis); padding-bottom: 1px; }
+.toc a:hover { color: var(--accent-ink); border-color: var(--accent); }
+
+.thesis {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+.thesis-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; align-items: baseline; }
+.thesis-head h2 { font-size: 1.25rem; }
+.key { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--ink-2); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
+.sw.accent { background: var(--accent); }
+.sw.gap { background: var(--gap); }
+.sw.ref { background: var(--ref); }
+
+.ladder { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.rung { display: grid; gap: 16px; align-content: start; padding: 18px; border-radius: 10px; background: var(--bg); min-width: 0; }
+.rung-head { display: grid; gap: 2px; }
+.rung-head h3 { font-size: 1.3rem; }
+.rung-head .eyebrow { color: var(--accent-ink); }
+.rung.gap .rung-head .eyebrow { color: var(--gap); }
+.stat { display: grid; gap: 5px; }
+.stat-val { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat-bar { height: 6px; background: var(--rail); border-radius: 3px; position: relative; overflow: hidden; }
+.stat-bar i { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 3px; }
+.rung.gap .stat-bar i { background: var(--gap); }
+.stat p { font-size: 0.88rem; color: var(--ink-2); line-height: 1.4; }
+.src { font-size: 0.74rem; color: var(--muted); }
+.thesis-note { font-size: 0.8rem; color: var(--muted); }
+
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.kpi { padding: 16px 18px; border-top: 2px solid var(--ink); display: grid; gap: 6px; align-content: start; }
+.kpi-val { font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 700; line-height: 1.05; }
+.kpi p { font-size: 0.88rem; color: var(--ink-2); line-height: 1.4; }
+
+/* ---------- Sections ---------- */
+section { display: grid; gap: 20px; scroll-margin-top: 16px; }
+.sec-head { display: grid; gap: 8px 44px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: start; }
+.sec-head > .eyebrow { grid-column: 1 / -1; }
+.sec-head h2 { grid-column: 1; }
+.sec-head p { grid-column: 2; color: var(--ink-2); padding-top: 4px; }
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 22px;
+  min-width: 0;
+}
+.split { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.reading { display: grid; gap: 14px; padding: 4px 4px 0; min-width: 0; }
+.reading h3 { font-size: 1rem; }
+
+/* ---------- Charts ---------- */
+.chart { display: grid; gap: 14px; }
+.chart-title { font-weight: 600; font-size: 0.98rem; }
+.chart-sub { font-size: 0.84rem; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.85rem; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.rows { display: grid; gap: 14px; }
+.row { display: grid; grid-template-columns: minmax(9rem, 38%) minmax(0, 1fr); gap: 6px 16px; align-items: center; }
+.row-label { font-size: 0.9rem; font-weight: 500; min-width: 0; line-height: 1.35; }
+.row-label small { display: block; font-size: 0.76rem; font-weight: 400; color: var(--muted); }
+.plot { position: relative; min-width: 0; }
+.track { position: relative; margin-right: 52px; }
+.gl { position: absolute; top: -7px; bottom: -7px; width: 1px; background: var(--grid); }
+.gl.base { background: var(--axis); }
+.stack { display: grid; gap: 3px; position: relative; }
+.bline { position: relative; height: 14px; cursor: default; }
+.stack.single .bline { height: 18px; }
+.bar { position: absolute; left: 0; top: 1px; bottom: 1px; border-radius: 0 4px 4px 0; min-width: 2px; }
+.bline:hover .bar, .bline:focus-visible .bar { filter: brightness(1.08) saturate(1.1); }
+.bval { position: absolute; top: 50%; transform: translateY(-50%); font-size: 0.78rem; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.axis { display: grid; grid-template-columns: minmax(9rem, 38%) minmax(0, 1fr); gap: 16px; }
+.axis .track { height: 16px; }
+.tick { position: absolute; transform: translateX(-50%); font-size: 0.74rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tick.first { transform: none; }
+.chart-note { font-size: 0.8rem; color: var(--muted); line-height: 1.45; }
+.minis { display: grid; gap: 30px; }
+.minis .chart + .chart { border-top: 1px solid var(--grid); padding-top: 24px; }
+
+/* ---------- Share bars (empresas) ---------- */
+.shares { display: grid; gap: 16px; }
+.share { display: grid; grid-template-columns: minmax(9rem, 34%) 1fr; gap: 8px 20px; align-items: center; }
+.share-label { display: grid; gap: 2px; min-width: 0; }
+.share-label strong { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; }
+.share-label small { color: var(--muted); font-size: 0.82rem; line-height: 1.35; }
+.share-bar { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.share-track { flex: 1; height: 22px; border-radius: 5px; background: var(--rail); position: relative; overflow: hidden; }
+.share-fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 5px 4px 4px 5px; }
+.share-mark { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink); opacity: 0.55; }
+.share-val { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; min-width: 4.4ch; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- Facts ---------- */
+.facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; min-width: 0; }
+.facts li { padding: 12px 0; border-bottom: 1px solid var(--grid); color: var(--ink-2); }
+.facts li:first-child { padding-top: 0; }
+.facts li:last-child { border-bottom: 0; padding-bottom: 0; }
+.facts strong { color: var(--ink); font-weight: 600; }
+.ev { display: block; margin-top: 4px; font-size: 0.74rem; color: var(--muted); }
+
+/* ---------- Verdict & conclusions ---------- */
+.verdict {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 22px; align-items: start;
+  background: var(--accent-soft); border-radius: 12px; padding: 22px 24px;
+}
+.verdict .mark { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent-ink); padding-top: 6px; }
+.verdict .claim { font-family: var(--font-display); font-size: clamp(1.15rem, 2.4vw, 1.5rem); font-weight: 600; line-height: 1.3; color: var(--ink); }
+.verdict .claim + p { color: var(--ink-2); font-size: 0.92rem; margin-top: 10px; }
+.concl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+.concl .panel { display: grid; gap: 14px; }
+.concl h3 { font-size: 1.05rem; display: flex; align-items: center; gap: 8px; }
+.gaps-list { margin: 0; padding-left: 1.1rem; display: grid; gap: 8px; color: var(--ink-2); }
+
+/* ---------- Table ---------- */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 980px; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--grid); vertical-align: top; }
+td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+thead th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+thead th.n { text-align: right; }
+tbody tr:last-child td { border-bottom: 0; }
+td small { display: block; color: var(--muted); font-size: 0.76rem; }
+.weight { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 3px 8px; border-radius: 999px; white-space: nowrap; border: 1px solid var(--line); color: var(--ink-2); }
+.weight.base { background: var(--accent-soft); border-color: transparent; color: var(--accent-ink); }
+.weight.ind { border-style: dashed; }
+
+/* ---------- Notes ---------- */
+.notes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+.notes > div { min-width: 0; }
+.notes ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 8px; color: var(--ink-2); font-size: 0.9rem; }
+.notes h3 { font-size: 1rem; margin-bottom: 10px; }
+footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; }
+
+/* ---------- Tooltip ---------- */
+.tip {
+  position: fixed; z-index: 10; pointer-events: none; max-width: 260px;
+  background: var(--tip-bg); color: var(--tip-fg); font-size: 0.8rem; line-height: 1.4;
+  padding: 7px 10px; border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .split, .notes, .concl { grid-template-columns: minmax(0, 1fr); }
+  .ladder { grid-template-columns: minmax(0, 1fr); }
+  .hero-top, .sec-head { grid-template-columns: minmax(0, 1fr); grid-template-areas: none; }
+  .hero-top > .eyebrow, .hero-top h1, .hero-top .lede, .hero-top .toc { grid-area: auto; }
+  .sec-head > .eyebrow, .sec-head h2, .sec-head p { grid-column: auto; }
+  .sec-head p { padding-top: 0; }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .wrap { gap: 48px; padding-block: 28px 56px; padding-inline: 16px; }
+  .share, .row, .axis { grid-template-columns: minmax(0, 1fr); }
+  .axis > :first-child { display: none; }
+  .share-val { font-size: 1.3rem; }
+  .thesis, .panel { padding: 18px; }
+  .verdict { grid-template-columns: minmax(0, 1fr); }
+  .track { margin-right: 44px; }
+}
+@media (max-width: 420px) {
+  .kpis { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bar, .share-fill { transition: filter 0.15s ease; }
+}
+
+/* ---------- Quotes & sources ---------- */
+.quotes { display: grid; gap: 16px; }
+.quote { margin: 0; padding-left: 14px; border-left: 2px solid var(--accent); display: grid; gap: 4px; }
+.quote p { font-family: var(--font-display); font-size: 1.04rem; font-weight: 500; line-height: 1.4; color: var(--ink); }
+.quote cite { font-style: normal; font-size: 0.76rem; color: var(--muted); }
+.kpi .src { margin-top: 2px; }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-top">
+      <span class="eyebrow">Portugal · jovens dos 15 aos 35 anos, sobretudo dos 18 aos 25 · retrato de outubro de 2026</span>
+      <h1>Capacitação Climática dos Jovens</h1>
+      <p class="lede">Os jovens portugueses estão entre os europeus mais conscientes, mais preocupados e mais dispostos a mudar, e dizem querer contribuir. A ação, a participação e os percursos profissionais ficam atrás. Este diagnóstico cruza oito estudos publicados entre 2021 e 2026, com o peso de cada amostra em conta, para medir a distância entre saber e fazer e o que a pode encurtar.</p>
+      <nav class="toc" aria-label="Secções">
+        <a href="#saber">Saber</a>
+        <a href="#sentir">Sentir</a>
+        <a href="#fazer">Fazer</a>
+        <a href="#transicao">Transição</a>
+        <a href="#proposito">Propósito</a>
+        <a href="#barreiras">Barreiras</a>
+        <a href="#trabalho">Trabalho</a>
+        <a href="#conclusoes">Conclusões</a>
+        <a href="#fontes">Fontes e solidez</a>
+      </nav>
+    </div>
+
+    <div class="thesis">
+      <div class="thesis-head">
+        <h2>Sabem e querem. Falta saber fazer.</h2>
+        <div class="key">
+          <span><i class="sw accent"></i>Consciência e intenção</span>
+          <span><i class="sw gap"></i>Ação e capacidade</span>
+        </div>
+      </div>
+      <div class="ladder">
+        <div class="rung">
+          <div class="rung-head"><span class="eyebrow">Consciência</span><h3>Saber</h3></div>
+          <div class="stat">
+            <div class="stat-val">86%</div>
+            <div class="stat-bar" aria-hidden="true"><i style="width: 86%"></i></div>
+            <p>dos jovens dos 15 aos 30 anos aprenderam a cuidar do ambiente na escola ou na formação (UE: 72%)</p>
+            <span class="src">Flash Eurobarómetro 545, 2024 · 1.017 jovens</span>
+          </div>
+          <div class="stat">
+            <div class="stat-val">86%</div>
+            <div class="stat-bar" aria-hidden="true"><i style="width: 86%"></i></div>
+            <p>dos jovens dos 18 aos 25 anos reconhecem a atividade humana como principal causa</p>
+            <span class="src">Fundação EDP, 2026 · 1.000 jovens</span>
+          </div>
+          <div class="stat">
+            <div class="stat-val">84%</div>
+            <div class="stat-bar" aria-hidden="true"><i style="width: 84%"></i></div>
+            <p>acreditam que as alterações climáticas vão afetar a sua vida no futuro</p>
+            <span class="src">Fundação EDP, 2026 · 1.000 jovens</span>
+          </div>
+        </div>
+        <div class="rung">
+          <div class="rung-head"><span class="eyebrow">Intenção</span><h3>Querer</h3></div>
+          <div class="stat">
+            <div class="stat-val">85%</div>
+            <div class="stat-bar" aria-hidden="true"><i style="width: 85%"></i></div>
+            <p>dos jovens dos 15 aos 30 anos dizem tentar adaptar o estilo de vida para reduzir o impacto ambiental (UE: 76%)</p>
+            <span class="src">Flash Eurobarómetro 545, 2024 · 1.017 jovens</span>
+          </div>
+          <div class="stat">
+            <div class="stat-val">80%</div>
+            <div class="stat-bar" aria-hidden="true"><i style="width: 80%"></i></div>
+            <p>dos jovens dos 18 aos 25 anos dizem-se dispostos a mudar comportamentos</p>
+            <span class="src">Fundação EDP, 2026 · 1.000 jovens</span>
+          </div>
+          <div class="stat">
+            <div class="stat-val">95%</div>
+            <div class="stat-bar" aria-hidden="true"><i style="width: 95%"></i></div>
+            <p>da geração Z dizem que o propósito é importante para a satisfação no trabalho (millennials: 98%)</p>
+            <span class="src">Deloitte, 2026 · ≈200 jovens por geração</span>
+          </div>
+        </div>
+        <div class="rung gap">
+          <div class="rung-head"><span class="eyebrow">Ação e capacidade</span><h3>Fazer</h3></div>
+          <div class="stat">
+            <div class="stat-val">46%</div>
+            <div class="stat-bar" aria-hidden="true"><i style="width: 46%"></i></div>
+            <p>dos jovens dos 18 aos 25 anos adotam quatro ou menos medidas de sustentabilidade (média: cinco)</p>
+            <span class="src">Fundação EDP, 2026 · 1.000 jovens</span>
+          </div>
+          <div class="stat">
+            <div class="stat-val">46%</div>
+            <div class="stat-bar" aria-hidden="true"><i style="width: 46%"></i></div>
+            <p>da geração Z sentem que o trabalho está alinhado com os seus valores (millennials: 43%)</p>
+            <span class="src">Deloitte, 2026 · ≈200 jovens por geração</span>
+          </div>
+          <div class="stat">
+            <div class="stat-val">7%</div>
+            <div class="stat-bar" aria-hidden="true"><i style="width: 7%"></i></div>
+            <p>dos jovens dos 15 aos 30 anos participam numa organização ligada ao clima ou ao ambiente (UE: 10%)</p>
+            <span class="src">Flash Eurobarómetro 545, 2024 · 1.017 jovens</span>
+          </div>
+        </div>
+      </div>
+      <p class="thesis-note">Cada número vem de uma pergunta e de um estudo diferentes. Os três grupos não formam um funil: mostram o mesmo padrão visto de ângulos distintos.</p>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-val num">65%</div><p>dos jovens dos 16 aos 25 anos muito ou extremamente preocupados com o clima, o valor mais alto entre os países ricos estudados</p><span class="src">Lancet Planetary Health, 2021 · 1.000 jovens</span></div>
+      <div class="kpi"><div class="kpi-val num">2/3</div><p>dos jovens adultos têm um envolvimento reduzido com as questões ambientais</p><span class="src">Fundação Gulbenkian, 2025 · p. 65</span></div>
+      <div class="kpi"><div class="kpi-val num">56%</div><p>dos jovens dos 18 aos 25 anos referem o apoio financeiro como incentivo à sua participação</p><span class="src">Fundação EDP, 2026 · 1.000 jovens</span></div>
+      <div class="kpi"><div class="kpi-val num">43%</div><p>dos jovens dos 18 aos 25 anos gostariam muito de trabalhar em áreas ligadas à sustentabilidade</p><span class="src">Fundação EDP, 2026 · 1.000 jovens</span></div>
+    </div>
+  </header>
+
+  <section id="saber">
+    <div class="sec-head">
+      <span class="eyebrow">Flash Eurobarómetro 545, 2024 · Merck/GAD3, 2022 · Fundação EDP, 2026 · Fundação Gulbenkian, 2025</span>
+      <h2>Saber: a sensibilização já chegou aos jovens</h2>
+      <p>Em quase todos os indicadores de consciência e intenção, os jovens portugueses ficam acima da média europeia, e a escola já os ensina a cuidar do ambiente. O que falta é ligar esse conhecimento à economia, à tecnologia e ao trabalho.</p>
+    </div>
+    <div class="split">
+      <div class="panel">
+        <div class="chart" id="chart-saber">
+          <div>
+            <div class="chart-title">Jovens portugueses e média europeia</div>
+            <div class="chart-sub">% de cada grupo · fonte, data e idades por baixo de cada indicador</div>
+          </div>
+        </div>
+      </div>
+      <ul class="facts">
+        <li><strong>A escola chega a quase todos.</strong> 86% dizem ter aprendido a cuidar do ambiente na escola ou na formação, bem acima da média europeia (72%).<span class="ev">Flash Eurobarómetro 545, 2024 · 1.017 jovens</span></li>
+        <li><strong>Mas fica pela sensibilização.</strong> 56% reconhecem o contributo da escola ou da universidade, mas a abordagem é fragmentada e pouco ligada à economia, à tecnologia e às profissões da transição.<span class="ev">Fundação EDP, 2026 · 1.000 jovens</span></li>
+        <li><strong>Sem negacionismo.</strong> Só 3% dizem não procurar informação sobre o tema.<span class="ev">Fundação EDP, 2026 · 1.000 jovens</span></li>
+        <li><strong>Informação pelas redes.</strong> O conhecimento dos jovens sobre sustentabilidade vem, em grande parte, das redes sociais, e são os que menos procuram informação por iniciativa própria.<span class="ev">Fundação Gulbenkian, 2025 · p. 61</span></li>
+        <li><strong>O futuro numa palavra.</strong> «Sustentabilidade» foi a palavra mais escolhida pelos jovens portugueses para definir o futuro; na média europeia ganhou «tecnologia».<span class="ev">Merck/GAD3, 2022 · 612 jovens</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="sentir">
+    <div class="sec-head">
+      <span class="eyebrow">Lancet Planetary Health, 2021 · Fundação EDP, 2026</span>
+      <h2>Sentir: muita preocupação, pouca vontade de alarme</h2>
+      <p>Em 2021, os jovens portugueses estavam entre os mais preocupados do mundo com o clima. Em 2026, rejeitam o discurso alarmista e pedem soluções concretas.</p>
+    </div>
+    <div class="split">
+      <div class="panel">
+        <div class="chart" id="chart-sentir">
+          <div>
+            <div class="chart-title">Emoções face às alterações climáticas</div>
+            <div class="chart-sub">% dos jovens dos 16 aos 25 anos · Hickman et al., Lancet Planetary Health, 2021 (inquérito de maio e junho de 2021) · Portugal a destacar, restantes valores para o conjunto dos 10 países</div>
+          </div>
+        </div>
+      </div>
+      <ul class="facts">
+        <li><strong>Os mais preocupados entre os países ricos.</strong> 65% dos jovens portugueses estavam muito ou extremamente preocupados, acima da média dos dez países (59%).<span class="ev">Lancet Planetary Health, 2021 · 1.000 jovens em Portugal</span></li>
+        <li><strong>Cansaço do debate.</strong> O debate é sentido como agressivo, polarizado e político, o que gera fadiga e afastamento.<span class="ev">Fundação EDP, 2026 · focus groups e entrevistas</span></li>
+        <li><strong>O que pedem.</strong> Orientações diretas e com base científica, conteúdos curtos e práticos, narrativas positivas e mudanças graduais que caibam na rotina.<span class="ev">Fundação EDP, 2026 · focus groups e entrevistas</span></li>
+        <li><strong>Problemas a mais, soluções a menos.</strong> Os jovens notam que a comunicação tem falado mais dos problemas do que das soluções.<span class="ev">Fundação EDP, 2026 · focus groups e entrevistas</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="fazer">
+    <div class="sec-head">
+      <span class="eyebrow">Fundação EDP, 2026 · Fundação Gulbenkian, 2025 · Merck/GAD3, 2022</span>
+      <h2>Fazer: a ação fica atrás da intenção</h2>
+      <p>Os jovens adotam poucas medidas e veem a responsabilidade sobretudo nas instituições. Os sinais de envolvimento por perfil apontam no mesmo sentido, embora com uma amostra pequena.</p>
+    </div>
+    <div class="split">
+      <div class="panel">
+        <div class="minis">
+          <div class="chart" id="chart-quem">
+            <div>
+              <div class="chart-title">Quem deve combater as alterações climáticas em Portugal</div>
+              <div class="chart-sub">% dos jovens dos 18 aos 25 anos que escolhem cada ator · Fundação EDP, 2026</div>
+            </div>
+          </div>
+          <div class="chart" id="chart-perfis">
+            <div>
+              <div class="chart-title">Perfis de envolvimento ambiental</div>
+              <div class="chart-sub">% de cada grupo em cada perfil · Fundação Gulbenkian, 2025 (inquérito de junho de 2024)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="facts">
+        <li><strong>Cinco medidas.</strong> Em média, os jovens dos 18 aos 25 anos adotam cinco medidas de sustentabilidade, e 46% ficam por quatro ou menos.<span class="ev">Fundação EDP, 2026 · 1.000 jovens</span></li>
+        <li><strong>Dispostos, mas pouco.</strong> 90% dos jovens dos 18 aos 35 anos diziam-se dispostos a mudar hábitos, mas só cerca de 3 em 10 muito dispostos.<span class="ev">Merck/GAD3, 2022 · 612 jovens</span></li>
+        <li><strong>Responsabilidade fora de si.</strong> O Governo (30%), a UE (25%) e a ONU (20%) ficam à frente dos cidadãos (11%). As empresas não estão entre os quatro atores mais escolhidos.<span class="ev">Fundação EDP, 2026 · 1.000 jovens</span></li>
+        <li><strong>Menos envolvidos do que os adultos.</strong> Entre os 18 e os 24 anos há metade dos «Entusiastas» (13% contra 25%) e mais do dobro dos «Desinteressados» (19% contra 8%). São os que menos reciclam, menos escolhem produtos da época e menos limitam o consumo de carne.<span class="ev">Fundação Gulbenkian, 2025 · ≈136 jovens, leitura indicativa · p. 62–63</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="transicao">
+    <div class="sec-head">
+      <span class="eyebrow">Fundação Gulbenkian, 2025 · entrevistas e focus groups de out. 2023 a out. 2024</span>
+      <h2>Transição: o que se aprende na escola perde-se a caminho da vida adulta</h2>
+      <p>A sensibilização começa cedo, mas perde força ao crescer. A adolescência e a entrada na vida adulta são os momentos em que os hábitos aprendidos na escola se perdem, e falta quem dê continuidade.</p>
+    </div>
+    <div class="split">
+      <div class="panel">
+        <div class="chart">
+          <div>
+            <div class="chart-title">Na voz dos jovens</div>
+            <div class="chart-sub">Citações de participantes nas entrevistas e focus groups · Fundação Gulbenkian, 2025</div>
+          </div>
+          <div class="quotes">
+            <figure class="quote"><p>«Sinto que [quando estava na escola] implementava o que aprendia, mas depois acabei por me esquecer. […] Metem-se outras preocupações.»</p><cite>Jovem participante · p. 64</cite></figure>
+            <figure class="quote"><p>«Se calhar tenho de ter alguém a puxar por mim.»</p><cite>Jovem participante · p. 64</cite></figure>
+            <figure class="quote"><p>«Eu gostava de já ter mais certezas, mas não tendo emprego, não tenho ainda certeza de muita coisa.»</p><cite>Jovem participante · p. 64</cite></figure>
+            <figure class="quote"><p>«Eu sei que está mau [o planeta], mas também já sei que está mau há muito tempo e as pessoas não fazem nada para mudar.»</p><cite>Jovem participante · p. 64</cite></figure>
+            <figure class="quote"><p>«Eu acho que é no Secundário que se consolidam muitos hábitos. É o pré-adulto.»</p><cite>Jovem participante · p. 72</cite></figure>
+          </div>
+        </div>
+      </div>
+      <ul class="facts">
+        <li><strong>Começa cedo, perde-se ao crescer.</strong> A sensibilização ambiental começa numa idade precoce («foram os meus filhos que me ensinaram a reciclar»), mas tende a perder consistência e relevância ao longo do crescimento.<span class="ev">Fundação Gulbenkian, 2025 · p. 63</span></li>
+        <li><strong>Dois momentos críticos.</strong> A adolescência, marcada pela procura de identidade, e a fase de jovem adulto, com a entrada no mercado de trabalho.<span class="ev">Fundação Gulbenkian, 2025 · p. 63</span></li>
+        <li><strong>Depende de cada professor.</strong> Os projetos nas escolas dependem sobretudo de professores motivados («não é da escola, é mesmo de cada professor»). Criar hábitos exige um compromisso coletivo da escola.<span class="ev">Fundação Gulbenkian, 2025 · p. 65</span></li>
+        <li><strong>Menos ligados à comunidade.</strong> A grande maioria vive com os pais, está mais afastada das atividades do bairro e confia menos nas instituições.<span class="ev">Fundação Gulbenkian, 2025 · p. 60 e 63</span></li>
+        <li><strong>O trabalho como porta de entrada.</strong> Nos perfis «Recetivos» e «Ocupados», que juntam 43% dos jovens, a participação faz-se por via da empresa onde trabalham.<span class="ev">Fundação Gulbenkian, 2025 · p. 63 e 81</span></li>
+        <li><strong>O que o estudo propõe.</strong> «Chegar até eles, criar um diálogo relevante, evidenciar benefícios diretos» e criar «experiências práticas que os envolvam de forma significativa».<span class="ev">Fundação Gulbenkian, 2025 · p. 17 e 65</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="proposito">
+    <div class="sec-head">
+      <span class="eyebrow">Deloitte, 2026 · Flash Eurobarómetro 545, 2024 · Fundação EDP, 2026 · Fundação Gulbenkian, 2025 · Merck/GAD3, 2022</span>
+      <h2>Propósito: querem contribuir, mas não encontram onde</h2>
+      <p>Quase todos os jovens dizem que o propósito é importante no trabalho, mas menos de metade o encontra. Fora do trabalho, poucos participam em organizações ligadas ao clima, e a maioria não sabe que organizações existem perto de si.</p>
+    </div>
+    <div class="split">
+      <div class="panel">
+        <div class="minis">
+          <div class="chart" id="chart-proposito">
+            <div>
+              <div class="chart-title">Propósito no trabalho</div>
+              <div class="chart-sub">% de cada geração em Portugal · Deloitte, Gen Z and Millennial Survey 2026 · ≈200 jovens por geração</div>
+            </div>
+          </div>
+          <div class="chart" id="chart-participacao">
+            <div>
+              <div class="chart-title">Participação em organizações</div>
+              <div class="chart-sub">% dos jovens dos 15 aos 30 anos que participaram em atividades de cada tipo de organização · Flash Eurobarómetro 545, 2024</div>
+            </div>
+          </div>
+          <div class="chart" id="chart-motivos">
+            <div>
+              <div class="chart-title">O que mais aproxima as pessoas das organizações ambientais</div>
+              <div class="chart-sub">% da população com 18 ou mais anos · Fundação Gulbenkian, 2025 (inquérito de junho de 2024)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="facts">
+        <li><strong>Propósito sem resposta no trabalho.</strong> 95% da geração Z e 98% dos millennials dizem que o propósito é importante para a satisfação no trabalho. Só 46% e 43% sentem que o trabalho está alinhado com os seus valores.<span class="ev">Deloitte, 2026 · ≈200 jovens por geração</span></li>
+        <li><strong>Querem fazer parte da resposta.</strong> É a leitura da Fundação EDP. 30% pedem que o seu papel ativo nos projetos seja reconhecido, e os jovens pedem impacto visível.<span class="ev">Fundação EDP, 2026 · 1.000 jovens</span></li>
+        <li><strong>Pouca participação organizada.</strong> Só 7% participam numa organização ligada ao clima ou ao ambiente (UE: 10%), e 37% não participam em nenhuma das organizações referidas (UE: 32%).<span class="ev">Flash Eurobarómetro 545, 2024 · 1.017 jovens</span></li>
+        <li><strong>Organizações que não se veem.</strong> 91% dos portugueses valorizam as organizações ambientais, mas a maioria não sabe quais atuam na sua região. 41% dessas organizações funcionam só com trabalho voluntário.<span class="ev">Fundação Gulbenkian, 2025 · 1.509 pessoas e 101 organizações · p. 16</span></li>
+        <li><strong>Ações, não declarações.</strong> Só 7% dos jovens portugueses dão peso aos valores declarados no site de uma empresa (22% na Europa); 39% valorizam ações concretas de igualdade e inclusão.<span class="ev">Merck/GAD3, 2022 · 612 jovens</span></li>
+        <li><strong>Emprego com impacto.</strong> Na UE, 66% dos jovens dos 15 aos 30 anos consideram importante ter um emprego que contribua para um ambiente melhor. O valor de Portugal só aparece num gráfico e não foi possível confirmá-lo.<span class="ev">Flash Eurobarómetro 545, 2024 · 26.189 jovens na UE</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="barreiras">
+    <div class="sec-head">
+      <span class="eyebrow">Fundação EDP, 2026 · Deloitte, 2026</span>
+      <h2>Barreiras: dinheiro e falta de apoio para pôr em prática</h2>
+      <p>O que trava os jovens é sobretudo económico e prático. Quando dizem o que os ajudaria, pedem meios e acompanhamento, e não mais informação.</p>
+    </div>
+    <div class="split">
+      <div class="panel">
+        <div class="minis">
+          <div class="chart" id="chart-obstaculos">
+            <div>
+              <div class="chart-title">O que trava a ação individual</div>
+              <div class="chart-sub">% dos jovens dos 18 aos 25 anos · Fundação EDP, 2026</div>
+            </div>
+          </div>
+          <div class="chart" id="chart-incentivos">
+            <div>
+              <div class="chart-title">O que facilitaria a sua participação</div>
+              <div class="chart-sub">% dos jovens dos 18 aos 25 anos · Fundação EDP, 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="facts">
+        <li><strong>Custo de vida.</strong> 48% apontam o custo de vida e 46% o preço das soluções sustentáveis como obstáculos à ação individual.<span class="ev">Fundação EDP, 2026 · 1.000 jovens</span></li>
+        <li><strong>A principal preocupação das duas gerações.</strong> 51% da geração Z e 50% dos millennials põem o custo de vida entre as três maiores preocupações; 57% da geração Z dizem não conseguir comprar casa (millennials: 41%).<span class="ev">Deloitte, 2026 · ≈200 jovens por geração</span></li>
+        <li><strong>Saber como.</strong> Há dificuldade em perceber como funcionam, na prática, a mitigação e a transição.<span class="ev">Fundação EDP, 2026 · focus groups e entrevistas</span></li>
+        <li><strong>Mudanças estruturais.</strong> Os jovens consideram que as grandes mudanças dependem de decisões políticas e económicas, o que reduz o sentido da ação individual.<span class="ev">Fundação EDP, 2026 · 1.000 jovens</span></li>
+        <li><strong>Ver o próprio papel.</strong> 30% pedem que o seu papel ativo nos projetos seja reconhecido, e 38% querem apoio para implementar.<span class="ev">Fundação EDP, 2026 · 1.000 jovens</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="trabalho">
+    <div class="sec-head">
+      <span class="eyebrow">Fundação EDP, 2026 · Flash Eurobarómetro 545, 2024 · Merck/GAD3, 2022 · ManpowerGroup, 2024 · LinkedIn, 2025</span>
+      <h2>Trabalho: interesse dos jovens, procura das empresas, sem ponte entre os dois</h2>
+      <p>Muitos jovens gostariam de trabalhar em sustentabilidade e as empresas procuram talento verde. Os jovens não veem os percursos, e a formação está pouco ligada ao mercado.</p>
+    </div>
+    <div class="split">
+      <div class="panel">
+        <div class="minis">
+          <div class="chart" id="chart-jovens-emprego">
+            <div>
+              <div class="chart-title">Jovens e emprego verde</div>
+              <div class="chart-sub">% de cada grupo · fonte, data e âmbito por baixo de cada indicador</div>
+            </div>
+          </div>
+          <div class="chart" id="chart-empregadores">
+            <div>
+              <div class="chart-title">O mercado que os espera: empregadores em Portugal</div>
+              <div class="chart-sub">% dos empregadores inquiridos em Portugal · ManpowerGroup, Green Business Transformation, 2024</div>
+            </div>
+          </div>
+          <div class="chart" id="chart-cv">
+            <div>
+              <div class="chart-title">O que pesa ao escolher onde trabalhar</div>
+              <div class="chart-sub">% que escolhem cada fator (até três), jovens dos 18 aos 35 anos · Merck/GAD3, 2022</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="facts">
+        <li><strong>Percursos invisíveis.</strong> Os jovens desconhecem profissões concretas da transição e veem as profissões técnicas da área como pouco qualificadas ou pouco prestigiadas.<span class="ev">Fundação EDP, 2026 · focus groups e entrevistas</span></li>
+        <li><strong>Orientação sem informação.</strong> Nas escolas, orientadores vocacionais e professores têm pouca informação sobre o setor, e a ligação entre sustentabilidade, formação e mercado de trabalho é fraca.<span class="ev">Fundação EDP, 2026 · focus groups e entrevistas</span></li>
+        <li><strong>Procura acima da oferta.</strong> A nível global, a contratação de pessoas com competências verdes cresceu 7,7% entre 2024 e 2025, quase o dobro do crescimento dessas competências (4,3%).<span class="ev">LinkedIn Green Skills Report, dez. 2025 · dados globais</span></li>
+        <li><strong>Vantagem para quem as tem.</strong> Quem tem competências verdes é contratado a uma taxa 46,6% acima da média, e 53% destas contratações já são para funções sem «verde» no nome.<span class="ev">LinkedIn Green Skills Report, dez. 2025 · dados globais</span></li>
+        <li><strong>Aprendem por conta própria.</strong> 60% da geração Z e 45% dos millennials desenvolvem competências fora da escola todas as semanas.<span class="ev">Deloitte, 2025 · ≈200 jovens por geração</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="conclusoes">
+    <div class="sec-head">
+      <span class="eyebrow">Leitura do diagnóstico · outubro de 2026</span>
+      <h2>Conclusões</h2>
+      <p>O que a imagem atual permite concluir, com o peso de cada fonte em conta. As fontes mais sólidas são a Fundação EDP (2026) e o Flash Eurobarómetro 545 (2024), com cerca de 1.000 jovens em Portugal cada.</p>
+    </div>
+    <div class="verdict">
+      <span class="mark">Síntese</span>
+      <div>
+        <p class="claim">A imagem atual justifica investir na capacitação prática dos jovens para a descarbonização: aprender fazendo, com continuidade depois da escola, resultados visíveis e ligação ao trabalho. Não justifica mais sensibilização genérica.</p>
+        <p>Os jovens sabem, preocupam-se e querem contribuir. Faltam os meios, o acompanhamento para pôr em prática, um lugar onde dar uso ao propósito que procuram e caminhos para transformar interesse em profissão.</p>
+      </div>
+    </div>
+    <div class="concl">
+      <div class="panel">
+        <h3><i class="sw accent"></i>Sinais a favor</h3>
+        <ul class="facts">
+          <li><strong>A falha é de aplicação.</strong> 86% aprenderam a cuidar do ambiente na escola e 80% estão dispostos a mudar, mas 46% adotam quatro medidas ou menos.<span class="ev">Flash Eurobarómetro 545, 2024 · Fundação EDP, 2026</span></li>
+          <li><strong>O momento crítico está identificado.</strong> A consciência perde-se entre a escola e a vida adulta, e os próprios jovens dizem precisar de «alguém a puxar» por eles.<span class="ev">Fundação Gulbenkian, 2025</span></li>
+          <li><strong>Propósito sem canal.</strong> 95% a 98% valorizam o propósito no trabalho, menos de metade o encontra, e só 7% participam numa organização ligada ao clima ou ao ambiente.<span class="ev">Deloitte, 2026 · Flash Eurobarómetro 545, 2024</span></li>
+          <li><strong>Pedem apoio para fazer.</strong> Mais do que informação, pedem apoio à implementação (38%), reconhecimento do seu papel (30%) e ajuda para perceber como a transição funciona na prática.<span class="ev">Fundação EDP, 2026</span></li>
+          <li><strong>Querem trabalhar na área e o mercado procura.</strong> 43% gostariam muito de trabalhar em sustentabilidade e 91% dos empregadores não encontram competências verdes. Falta a ponte: percursos visíveis e formação ligada ao mercado.<span class="ev">Fundação EDP, 2026 · ManpowerGroup, 2024</span></li>
+          <li><strong>Dizem o formato que funciona.</strong> Conteúdos curtos e práticos, com base científica, narrativas positivas, proximidade e experiência direta.<span class="ev">Fundação EDP, 2026 · Fundação Gulbenkian, 2025</span></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3><i class="sw gap"></i>Condições e riscos</h3>
+        <ul class="facts">
+          <li><strong>O dinheiro pesa.</strong> O custo de vida (48%) e o preço das soluções (46%) travam a ação, 56% referem o apoio financeiro como incentivo e o custo de vida é a principal preocupação das duas gerações (cerca de 50%). Aprender tem de trazer valor visível: poupança, emprego, certificação.<span class="ev">Fundação EDP, 2026 · Deloitte, 2026</span></li>
+          <li><strong>A sensibilização está saturada.</strong> Repetir a mensagem de que é preciso cuidar do ambiente acrescenta pouco a quem já a ouviu na escola.<span class="ev">Flash Eurobarómetro 545, 2024</span></li>
+          <li><strong>A preocupação pode paralisar.</strong> Com preocupação alta e fadiga do debate, mensagens alarmistas ou moralistas afastam. O que funciona é dar agência: o que cada um pode fazer e com que efeito.<span class="ev">Lancet Planetary Health, 2021 · Fundação EDP, 2026</span></li>
+          <li><strong>A responsabilidade é vista como alheia.</strong> Só 11% põem os cidadãos em primeiro lugar. É preciso mostrar onde a ação individual e coletiva faz diferença.<span class="ev">Fundação EDP, 2026</span></li>
+          <li><strong>O envolvimento é desigual.</strong> Há sinais de menos jovens muito ativos e mais desinteressados do que nos adultos, menos ligados à comunidade e às instituições. Uma oferta que fale só para os convencidos chega a poucos.<span class="ev">Fundação Gulbenkian, 2025 · leitura indicativa</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel">
+      <h3 style="font-size: 1rem; margin-bottom: 10px;">O que este diagnóstico não mede</h3>
+      <ul class="gaps-list">
+        <li>A oferta que já existe para jovens em educação climática e competências verdes, e onde se sobrepõe.</li>
+        <li>O tempo e o formato que os jovens estão dispostos a dar a uma formação ou a um projeto prático.</li>
+        <li>A disponibilidade de escolas, universidades e empresas para receber jovens em projetos reais.</li>
+        <li>O financiamento disponível para iniciativas educativas nesta área.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="fontes">
+    <div class="sec-head">
+      <span class="eyebrow">Metodologia</span>
+      <h2>Fontes e solidez</h2>
+      <p>O que pesa na fiabilidade é o número de jovens inquiridos em Portugal, não a amostra total de um estudo europeu ou mundial. Todas as sondagens usam painéis online, por isso as margens de erro são aproximadas.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Estudo</th>
+            <th scope="col">Publicação</th>
+            <th scope="col">Quem foi inquirido em Portugal</th>
+            <th scope="col">Recolha</th>
+            <th scope="col">Método</th>
+            <th scope="col" class="n">Margem de erro</th>
+            <th scope="col">Peso neste diagnóstico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Fundação EDP e The Equator Company<small>Perceções dos Jovens Portugueses sobre Alterações Climáticas e Sustentabilidade</small></td><td>5 ago. 2026</td><td>1.000 jovens, 18–25 anos</td><td>dez. 2025 – fev. 2026</td><td>Online, quotas por género, idade e região; 4 focus groups e 16 entrevistas</td><td class="n">±4,9%<small>declarada</small></td><td><span class="weight base">Base</span></td></tr>
+          <tr><td>Flash Eurobarómetro 545<small>Youth and democracy · Comissão Europeia</small></td><td>mai. 2024</td><td>1.017 jovens, 15–30 anos<small>26.189 na UE</small></td><td>abr. 2024</td><td>Painel online Ipsos, ponderado por idade e género</td><td class="n">≈ ±3,1%</td><td><span class="weight base">Base</span></td></tr>
+          <tr><td>Fundação Gulbenkian e Ipsos APEME<small>Clima de Mudança</small></td><td>25 jun. 2025</td><td>≈136 jovens, 18–24 anos<small>numa amostra de 1.509 adultos; 25 entrevistas, 12 focus groups e 101 organizações ambientais</small></td><td>jun. 2024 (inquérito)<small>out. 2023 – out. 2024 (qualitativo)</small></td><td>Painel online, quotas por género, idade e região; mais licenciados e rendimento acima da média</td><td class="n">≈ ±8,4%<small>jovens</small></td><td><span class="weight ind">Números: indicativo</span> <span class="weight">Qualitativo: complemento</span></td></tr>
+          <tr><td>Deloitte<small>Gen Z and Millennial Survey</small></td><td>2025 e 2026</td><td>≈400 jovens por edição<small>≈200 da geração Z e ≈200 millennials; ≈23.000 em 44 países</small></td><td>nov. 2025 – jan. 2026<small>edição de 2026</small></td><td>Online</td><td class="n">≈ ±6,9%<small>por geração</small></td><td><span class="weight">Complemento</span></td></tr>
+          <tr><td>Hickman et al., Lancet Planetary Health<small>ansiedade climática em 10 países</small></td><td>dez. 2021</td><td>1.000 jovens, 16–25 anos<small>10.000 no total</small></td><td>mai.–jun. 2021</td><td>Online (Kantar)</td><td class="n">≈ ±3,1%</td><td><span class="weight">Complemento</span></td></tr>
+          <tr><td>Merck e GAD3<small>Sustentável ou nada</small></td><td>1 jul. 2022</td><td>612 jovens, 18–35 anos<small>6.119 em 10 países</small></td><td>mai. 2022</td><td>Online (CAWI), quotas por género e idade</td><td class="n">±4,1%<small>declarada</small></td><td><span class="weight">Complemento</span></td></tr>
+          <tr><td>ManpowerGroup<small>Green Business Transformation</small></td><td>mar. 2024</td><td>Empregadores em Portugal<small>≈39.000 no total</small></td><td>2024</td><td>Inquérito a empregadores</td><td class="n">—</td><td><span class="weight">Complemento</span></td></tr>
+          <tr><td>LinkedIn<small>Green Skills Report</small></td><td>dez. 2025</td><td>Dados globais da plataforma</td><td>2021–2025</td><td>Perfis de membros e contratações</td><td class="n">—</td><td><span class="weight">Contexto</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="notes">
+      <div>
+        <h3>Notas</h3>
+        <ul>
+          <li>Margens com «≈» calculadas para 95% de confiança e amostra aleatória simples. Em painéis online são aproximações.</li>
+          <li>Os estudos diferem em idades (15–30, 16–25, 18–24, 18–25, 18–35) e anos (2021 a 2026). Os números leem-se lado a lado, não como evolução.</li>
+          <li>Hickman et al. (2021) serve para o retrato emocional, não para medir comportamentos atuais.</li>
+          <li>Fundação Gulbenkian (2025): os perfis dos jovens vêm de um gráfico do relatório e de uma subamostra de cerca de 136 pessoas. As citações vêm da componente qualitativa e mostram perceções, não proporções.</li>
+          <li>Deloitte (2025 e 2026): cerca de 200 jovens por geração em Portugal. Os valores de Portugal foram retirados da cobertura na imprensa portuguesa, porque o relatório nacional não está publicado. Na edição de 2025, a geração Z inclui os nascidos entre 1995 e 2006 e os millennials os nascidos entre 1983 e 1994.</li>
+          <li>Merck/GAD3 (2022): «cerca de 3 em 10 muito dispostos» resume os valores de 28% a 32% observados por sexo e geração no relatório.</li>
+          <li>ManpowerGroup (2024) e LinkedIn (2025) medem empregadores e mercado de trabalho, não jovens. O LinkedIn não tem valores para Portugal.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Fontes</h3>
+        <ul>
+          <li><a href="https://www.fundacaoedp.pt/pt/noticias/jovens-reconhecem-gravidade-das-alteracoes-climaticas-mas-apontam-falta-de-condicoes-para" target="_blank" rel="noopener">Fundação EDP: Jovens reconhecem a gravidade das alterações climáticas mas apontam falta de condições para agir</a> · 5 ago. 2026</li>
+          <li><a href="https://cdn-images.rtp.pt/icm/noticias/docs/24/2492d62d2e5c1a27543a91c5bf2bef80_cf4593ee2a3eed43a7e17d152c65935c.pdf" target="_blank" rel="noopener">Comissão Europeia: Flash Eurobarómetro 545, Youth and democracy</a> · mai. 2024</li>
+          <li><a href="https://cdn.gulbenkian.pt/wp-content/uploads/2025/06/Livro-Digital_Clima-de-Mudanca_25-jun.pdf" target="_blank" rel="noopener">Fundação Gulbenkian e Ipsos APEME: Clima de Mudança</a> · 25 jun. 2025</li>
+          <li><a href="https://hrportugal.sapo.pt/?p=469854" target="_blank" rel="noopener">Deloitte: Gen Z and Millennial Survey 2026, resultados para Portugal, via HR Portugal</a> · 2026; <a href="https://www.e-konomista.pt/geracao-z-e-millennials-adiam-a-vida-por-dinheiro/" target="_blank" rel="noopener">via e-konomista</a> · 2026</li>
+          <li><a href="https://executivedigest.sapo.pt/?p=656012" target="_blank" rel="noopener">Deloitte: Gen Z and Millennial Survey 2025, resultados para Portugal, via Executive Digest</a> · 2025; <a href="https://eco.sapo.pt/2025/08/05/mais-de-metade-dos-jovens-portugueses-vive-de-salario-em-salario/" target="_blank" rel="noopener">via ECO</a> · 5 ago. 2025</li>
+          <li><a href="https://doaj.org/article/abfc090cee0744608acb782041a00910" target="_blank" rel="noopener">Hickman et al., The Lancet Planetary Health</a> · dez. 2021; <a href="https://media.nature.com/original/magazine-assets/d41586-021-02582-8/d41586-021-02582-8.pdf" target="_blank" rel="noopener">cobertura da Nature com o dado de Portugal</a> · set. 2021</li>
+          <li>Merck e GAD3: Sustainable or nothing, relatório por país (Portugal) · jun. 2022; comunicado de imprensa da Merck Portugal · 1 jul. 2022 (<a href="https://www.forbespt.com/?p=43280" target="_blank" rel="noopener">cobertura na Forbes Portugal</a>)</li>
+          <li><a href="https://hrportugal.sapo.pt/quer-um-emprego-com-futuro-mais-de-90-dos-empregadores-portugueses-tem-dificuldade-em-encontrar-talento-verde-sao-estas-as-funcoes-mais-requisitadas/" target="_blank" rel="noopener">ManpowerGroup: Green Business Transformation, resultados para Portugal, via HR Portugal</a> · 2024</li>
+          <li><a href="https://www.esgtoday.com/hiring-rate-for-workers-with-green-skills-dramatically-outpaces-broader-market-as-demand-outpaces-supply-linkedin-survey/" target="_blank" rel="noopener">LinkedIn: Green Skills Report, via ESG Today</a> · 8 dez. 2025</li>
+        </ul>
+      </div>
+    </div>
+    <footer>Diagnóstico preparado em outubro de 2026 com os dados públicos disponíveis nessa data.</footer>
+  </section>
+
+</div>
+
+<div class="tip" id="tip" role="tooltip" hidden></div>
+
+<script>
+(function () {
+  function pct(n) { return String(n).replace(".", ",") + "%"; }
+
+  function el(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+
+  function legend(series) {
+    var l = el("div", "legend");
+    series.forEach(function (s) {
+      l.appendChild(el("span", null, '<i class="sw" style="background: var(' + s.color + ')"></i>' + s.name));
+    });
+    return l;
+  }
+
+  function gridlines(track, ticks, max) {
+    ticks.forEach(function (t) {
+      var g = el("div", "gl" + (t === 0 ? " base" : ""));
+      g.style.left = (t / max * 100) + "%";
+      track.appendChild(g);
+    });
+  }
+
+  function axis(ticks, max) {
+    var a = el("div", "axis");
+    a.appendChild(el("div"));
+    var plot = el("div", "plot");
+    var track = el("div", "track");
+    ticks.forEach(function (t) {
+      var k = el("span", "tick" + (t === 0 ? " first" : ""), t + "%");
+      k.style.left = (t / max * 100) + "%";
+      track.appendChild(k);
+    });
+    plot.appendChild(track);
+    a.appendChild(plot);
+    return a;
+  }
+
+  function barLine(value, max, color, label, tip) {
+    var line = el("div", "bline");
+    line.tabIndex = 0;
+    line.setAttribute("data-tip", tip);
+    line.setAttribute("aria-label", tip);
+    var b = el("div", "bar");
+    b.style.width = (value / max * 100) + "%";
+    b.style.background = "var(" + color + ")";
+    var v = el("span", "bval", label);
+    v.style.left = "calc(" + (value / max * 100) + "% + 6px)";
+    line.appendChild(b);
+    line.appendChild(v);
+    return line;
+  }
+
+  function barChart(id, opt) {
+    var root = document.getElementById(id);
+    if (!root) return;
+    var multi = opt.series.length > 1;
+    if (multi) root.appendChild(legend(opt.series));
+    var list = el("div", "rows");
+    opt.rows.forEach(function (r) {
+      var row = el("div", "row");
+      row.appendChild(el("div", "row-label", r.label + (r.sub ? "<small>" + r.sub + "</small>" : "")));
+      var plot = el("div", "plot");
+      var track = el("div", "track");
+      gridlines(track, opt.ticks, opt.max);
+      var stack = el("div", "stack" + (multi ? "" : " single"));
+      opt.series.forEach(function (s) {
+        var v = r[s.key];
+        if (v == null) return;
+        var plain = r.label.replace(/<[^>]+>/g, "");
+        stack.appendChild(barLine(v, opt.max, r.color || s.color, pct(v),
+          plain + (multi ? " · " + s.name : "") + ": " + pct(v) + (opt.src ? " (" + opt.src + ")" : "")));
+      });
+      track.appendChild(stack);
+      plot.appendChild(track);
+      row.appendChild(plot);
+      list.appendChild(row);
+    });
+    root.appendChild(list);
+    root.appendChild(axis(opt.ticks, opt.max));
+    if (opt.note) root.appendChild(el("p", "chart-note", opt.note));
+  }
+
+  var PT_EU = [
+    { key: "pt", name: "Portugal", color: "--accent" },
+    { key: "eu", name: "Média europeia", color: "--ref" }
+  ];
+  var GEN = [
+    { key: "z", name: "Geração Z", color: "--g1" },
+    { key: "m", name: "Millennials", color: "--g2" }
+  ];
+  var T100 = [0, 25, 50, 75, 100];
+
+  barChart("chart-saber", {
+    series: PT_EU, max: 100, ticks: T100,
+    rows: [
+      { label: "Aprenderam a cuidar do ambiente na escola ou na formação", sub: "15–30 anos · UE · Flash Eurobarómetro 545, 2024", pt: 86, eu: 72 },
+      { label: "Tentam adaptar o estilo de vida para reduzir o impacto ambiental", sub: "15–30 anos · UE · Flash Eurobarómetro 545, 2024", pt: 85, eu: 76 },
+      { label: "Dispostos a mudar hábitos para reduzir a pegada", sub: "18–35 anos · 10 países · Merck/GAD3, 2022", pt: 90, eu: 82 },
+      { label: "Investiriam em políticas de proteção ambiental se governassem", sub: "18–35 anos · 10 países · Merck/GAD3, 2022", pt: 53, eu: 46 },
+      { label: "Falam regularmente de ambiente e sustentabilidade com os amigos", sub: "18–35 anos · 10 países · Merck/GAD3, 2022", pt: 32, eu: 35 },
+      { label: "Valorizam o compromisso com a sustentabilidade ao escolher empresa", sub: "18–35 anos · 10 países · Merck/GAD3, 2022", pt: 25, eu: 24 }
+    ]
+  });
+
+  barChart("chart-sentir", {
+    series: [{ key: "v", name: "Jovens 16–25", color: "--ref" }],
+    max: 100, ticks: T100, src: "Lancet Planetary Health, 2021",
+    rows: [
+      { label: "Muito ou extremamente preocupados", sub: "Portugal", v: 65, color: "--accent" },
+      { label: "Muito ou extremamente preocupados", sub: "média dos 10 países", v: 59 },
+      { label: "Pelo menos moderadamente preocupados", sub: "10 países", v: 84 },
+      { label: "Acham que as pessoas falharam no cuidado do planeta", sub: "10 países", v: 83 },
+      { label: "Acham que o futuro é assustador", sub: "10 países", v: 75 },
+      { label: "Acham que os governos estão a falhar aos jovens", sub: "10 países", v: 65 },
+      { label: "Dizem que estes sentimentos afetam o seu dia a dia", sub: "10 países · publicado como «mais de 45%»", v: 45 }
+    ]
+  });
+
+  barChart("chart-quem", {
+    series: [{ key: "v", name: "Jovens 18–25", color: "--accent" }],
+    max: 40, ticks: [0, 10, 20, 30, 40], src: "Fundação EDP, 2026",
+    rows: [
+      { label: "Governo", v: 30 },
+      { label: "União Europeia", v: 25 },
+      { label: "Nações Unidas", v: 20 },
+      { label: "Cidadãos individuais", v: 11, color: "--gap" }
+    ],
+    note: "Os restantes 14% repartem-se por outras respostas, não detalhadas na publicação. Fundação EDP, 2026."
+  });
+
+  barChart("chart-perfis", {
+    series: [
+      { key: "j", name: "Jovens 18–24", color: "--accent" },
+      { key: "t", name: "População 18+", color: "--ref" }
+    ],
+    max: 30, ticks: [0, 10, 20, 30], src: "Fundação Gulbenkian, 2025",
+    rows: [
+      { label: "Entusiastas", sub: "os mais ativos", j: 13, t: 25 },
+      { label: "Esforçados", j: 26, t: 27 },
+      { label: "Recetivos", j: 24, t: 25 },
+      { label: "Ocupados", j: 19, t: 15 },
+      { label: "Desinteressados", sub: "os menos ativos", j: 19, t: 8 }
+    ],
+    note: "Fundação Gulbenkian, 2025. Valores dos jovens com base em cerca de 136 pessoas (margem aproximada de ±8 pontos): leitura indicativa."
+  });
+
+  barChart("chart-proposito", {
+    series: GEN, max: 100, ticks: T100, src: "Deloitte, 2026",
+    rows: [
+      { label: "Dizem que o propósito é importante para a satisfação no trabalho", z: 95, m: 98 },
+      { label: "Sentem que o trabalho está alinhado com os seus valores", z: 46, m: 43 }
+    ],
+    note: "Deloitte, Gen Z and Millennial Survey 2026, resultados para Portugal citados pela HR Portugal. Cerca de 200 jovens por geração (margem aproximada de ±7 pontos)."
+  });
+
+  barChart("chart-participacao", {
+    series: PT_EU, max: 40, ticks: [0, 10, 20, 30, 40], src: "Flash Eurobarómetro 545, 2024",
+    rows: [
+      { label: "Organização com atividades de voluntariado", pt: 18, eu: 17 },
+      { label: "Clube ou organização de juventude", pt: 16, eu: 18 },
+      { label: "Organização ligada ao clima ou ao ambiente", pt: 7, eu: 10 },
+      { label: "Nenhuma das organizações referidas", pt: 37, eu: 32 }
+    ]
+  });
+
+  barChart("chart-motivos", {
+    series: [{ key: "v", name: "População 18+", color: "--accent" }],
+    max: 40, ticks: [0, 10, 20, 30, 40], src: "Fundação Gulbenkian, 2025",
+    rows: [
+      { label: "Proximidade e contacto fácil", v: 34 },
+      { label: "Exposição ou experiência direta com o tema", v: 28 },
+      { label: "Atitude otimista", v: 23 }
+    ],
+    note: "Fundação Gulbenkian, 2025, p. 82. Valores para a população em geral, não só para jovens."
+  });
+
+  barChart("chart-obstaculos", {
+    series: [{ key: "v", name: "Jovens 18–25", color: "--gap" }],
+    max: 60, ticks: [0, 20, 40, 60], src: "Fundação EDP, 2026",
+    rows: [
+      { label: "Custo de vida", v: 48 },
+      { label: "Preço das soluções sustentáveis", v: 46 }
+    ]
+  });
+
+  barChart("chart-incentivos", {
+    series: [{ key: "v", name: "Jovens 18–25", color: "--accent" }],
+    max: 60, ticks: [0, 20, 40, 60], src: "Fundação EDP, 2026",
+    rows: [
+      { label: "Apoio financeiro", v: 56 },
+      { label: "Apoio à implementação", v: 38 },
+      { label: "Reconhecimento do seu papel nos projetos", v: 30 }
+    ]
+  });
+
+  barChart("chart-jovens-emprego", {
+    series: [{ key: "v", name: "Jovens", color: "--accent" }],
+    max: 100, ticks: T100,
+    rows: [
+      { label: "Consideram importante um emprego que contribua para um ambiente melhor", sub: "15–30 anos · média da UE · Flash Eurobarómetro 545, 2024", v: 66, color: "--ref" },
+      { label: "Gostariam muito de trabalhar em áreas ligadas à sustentabilidade", sub: "18–25 anos · Portugal · Fundação EDP, 2026", v: 43 }
+    ],
+    note: "Perguntas e âmbitos diferentes: o primeiro valor é da média da UE, o segundo de Portugal."
+  });
+
+  barChart("chart-empregadores", {
+    series: [{ key: "v", name: "Empregadores", color: "--accent" }],
+    max: 100, ticks: T100, src: "ManpowerGroup, 2024",
+    rows: [
+      { label: "Têm dificuldade em encontrar competências verdes", v: 91, color: "--gap" },
+      { label: "Estão a recrutar ou planeiam recrutar talento verde", v: 65 },
+      { label: "Procuram talento verde em operações e logística", v: 35 },
+      { label: "Procuram talento verde em tecnologias e dados", v: 33 },
+      { label: "Procuram talento verde em indústria e produção", v: 31 }
+    ]
+  });
+
+  barChart("chart-cv", {
+    series: PT_EU, max: 80, ticks: [0, 20, 40, 60, 80], src: "Merck/GAD3, 2022",
+    rows: [
+      { label: "Salário", pt: 76, eu: 67 },
+      { label: "Ações de igualdade, diversidade e inclusão", pt: 39, eu: 30 },
+      { label: "Compromisso com a sustentabilidade (ODS)", pt: 25, eu: 24 },
+      { label: "Valores declarados no site", pt: 7, eu: 22 }
+    ]
+  });
+
+  /* Tooltip */
+  var tip = document.getElementById("tip");
+  function show(t) {
+    tip.textContent = t.getAttribute("data-tip");
+    tip.hidden = false;
+    var r = t.getBoundingClientRect();
+    var bar = t.querySelector(".bar");
+    var anchorX = bar ? bar.getBoundingClientRect().right : r.right;
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    var x = Math.min(Math.max(8, anchorX - w / 2), window.innerWidth - w - 8);
+    var y = r.top - h - 8;
+    if (y < 8) y = r.bottom + 8;
+    tip.style.left = x + "px";
+    tip.style.top = y + "px";
+  }
+  function hide() { tip.hidden = true; }
+  document.addEventListener("pointerover", function (e) {
+    var t = e.target.closest && e.target.closest("[data-tip]");
+    if (t) show(t);
+  });
+  document.addEventListener("pointerout", function (e) {
+    var t = e.target.closest && e.target.closest("[data-tip]");
+    if (t && !t.contains(e.relatedTarget)) hide();
+  });
+  document.addEventListener("focusin", function (e) {
+    var t = e.target.closest && e.target.closest("[data-tip]");
+    if (t) show(t); else hide();
+  });
+  document.addEventListener("focusout", hide);
+  window.addEventListener("scroll", hide, { passive: true });
+})();
+</script>
+
+</body></html>
